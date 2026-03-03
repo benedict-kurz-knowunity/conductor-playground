@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowunity Practice Page — Design Options</title>
+  <style>
+    :root {
+      --bg: #121218;
+      --surface: #1e1e2e;
+      --purple: #2d1b69;
+      --purple-bright: #8b5cf6;
+      --teal: #06b6d4;
+      --text-primary: #e5e5e5;
+      --text-secondary: #a0a0a0;
+      --border: #333;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .cards {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 700px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      width: 320px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: transform 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--teal);
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+
+    .card h2 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .card-cta {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--teal);
+    }
+
+    .card-cta::after {
+      content: ' →';
+    }
+
+    .card.option-a {
+      border-top: 3px solid var(--purple-bright);
+    }
+
+    .card.option-b {
+      border-top: 3px solid var(--teal);
+    }
+  </style>
+</head>
+<body>
+  <h1>Practice Page Designs</h1>
+  <p class="subtitle">Two design options for the Knowunity Practice area</p>
+
+  <div class="cards">
+    <a href="option-a.html" class="card option-a">
+      <div class="card-label">Option A</div>
+      <h2>Feed-Based Practice Hub</h2>
+      <p>Netflix-style horizontal scroll feeds organized by learning intent. Great for browsing and content discovery.</p>
+      <div class="card-cta">View prototype</div>
+    </a>
+
+    <a href="option-b.html" class="card option-b">
+      <div class="card-label">Option B</div>
+      <h2>Category Grid + Progress</h2>
+      <p>Structured grid-based discovery with stats dashboard. Quick access to specific quiz types.</p>
+      <div class="card-cta">View prototype</div>
+    </a>
+  </div>
+</body>
+</html>

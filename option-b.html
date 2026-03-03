@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Option B — Category Grid + Progress Dashboard</title>
+  <style>
+    :root {
+      --bg: #121218;
+      --surface: #1e1e2e;
+      --surface-elevated: #252532;
+      --purple: #2d1b69;
+      --purple-mid: #3d2680;
+      --purple-bright: #8b5cf6;
+      --teal: #06b6d4;
+      --teal-dark: #0891b2;
+      --green: #22c55e;
+      --green-dark: #1a4d2e;
+      --amber: #f59e0b;
+      --amber-dark: #5c3d1a;
+      --red: #ef4444;
+      --red-dark: #5c1a1a;
+      --blue-dark: #1e3a5f;
+      --text-primary: #e5e5e5;
+      --text-secondary: #a0a0a0;
+      --text-inverse: #121218;
+      --border: #2a2a3a;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-xs: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: #0a0a0f; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+      max-width: 393px;
+      margin: 0 auto;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== STATE TOGGLE ===== */
+    .state-toggle {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      display: flex;
+      overflow: hidden;
+      max-width: 393px;
+      width: 100%;
+    }
+
+    .state-toggle button {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .state-toggle button.active {
+      background: var(--teal);
+      color: var(--text-inverse);
+    }
+
+    .state-toggle button:not(.active) {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .back-link {
+      position: fixed;
+      top: 44px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      max-width: 393px;
+      width: 100%;
+      padding: 8px 16px;
+      background: var(--bg);
+    }
+
+    .back-link a {
+      color: var(--teal);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ===== MAIN ===== */
+    .phone-content {
+      padding-top: 76px;
+      padding-bottom: 80px;
+    }
+
+    /* ===== STATUS BAR ===== */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      padding: 4px 20px 12px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    /* ===== SEARCH BAR ===== */
+    .search-bar {
+      margin: 0 16px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-bar svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-secondary);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      flex-shrink: 0;
+    }
+
+    .search-bar span {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* ===== DAILY QUIZ COMPACT ===== */
+    .daily-quiz-compact {
+      margin: 0 16px 16px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, #1a0f3c 0%, #2d1b69 50%, #3d2680 100%);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .daily-quiz-compact:active { transform: scale(0.98); }
+
+    .dq-glow {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%);
+      top: -60px;
+      right: -30px;
+      pointer-events: none;
+    }
+
+    .dq-inner {
+      position: relative;
+      z-index: 1;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .dq-content { flex: 1; }
+
+    .dq-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+
+    .dq-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .dq-title .pro { color: var(--teal); }
+
+    .dq-timer {
+      font-size: 12px;
+      color: var(--teal);
+      font-weight: 500;
+    }
+
+    .dq-play {
+      background: var(--text-primary);
+      color: var(--text-inverse);
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+
+    .dq-play:active { transform: scale(0.95); }
+
+    .dq-subjects {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 8px;
+      padding: 0 20px 14px;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .dq-subjects::-webkit-scrollbar { display: none; }
+
+    .dq-subject-chip {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dq-subject-chip.active {
+      background: rgba(6,182,212,0.15);
+      color: var(--teal);
+      border: 1px solid rgba(6,182,212,0.3);
+    }
+
+    .dq-subject-chip:not(.active) {
+      border: 1px solid transparent;
+    }
+
+    /* ===== STATS DASHBOARD ===== */
+    .stats-dashboard {
+      margin: 0 16px 16px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .stat-item:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .stat-value.teal { color: var(--teal); }
+    .stat-value.amber { color: var(--amber); }
+    .stat-value.green { color: var(--green); }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* ===== SECTION HEADER ===== */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .section-link {
+      font-size: 13px;
+      color: var(--teal);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* ===== CATEGORY GRID ===== */
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 16px;
+    }
+
+    .category-card {
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      cursor: pointer;
+      transition: transform 0.15s;
+      position: relative;
+      overflow: hidden;
+      min-height: 100px;
+    }
+
+    .category-card:active { transform: scale(0.97); }
+
+    .cat-glow {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      top: -20px;
+      right: -20px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .cat-emoji {
+      font-size: 28px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cat-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 3px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cat-count {
+      font-size: 12px;
+      color: var(--text-secondary);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== GENERATE CTA ===== */
+    .generate-cta {
+      margin: 14px 16px;
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      border: 1.5px dashed var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .generate-cta:hover { border-color: var(--teal); }
+
+    .gen-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(6,182,212,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .gen-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .gen-text { flex: 1; }
+
+    .gen-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .gen-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .gen-arrow {
+      color: var(--teal);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ===== CONTINUE CARDS ===== */
+    .continue-card {
+      margin: 0 16px 10px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .continue-card:active { transform: scale(0.98); }
+
+    .continue-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .continue-info { flex: 1; min-width: 0; }
+
+    .continue-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .continue-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+    }
+
+    .progress-fill.teal { background: var(--teal); }
+    .progress-fill.purple { background: var(--purple-bright); }
+    .progress-fill.green { background: var(--green); }
+
+    .continue-pct {
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .continue-pct.teal { color: var(--teal); }
+    .continue-pct.purple { color: var(--purple-bright); }
+    .continue-pct.green { color: var(--green); }
+
+    .continue-arrow {
+      color: var(--text-secondary);
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-left: 4px;
+    }
+
+    /* ===== RECOMMENDATION CARDS (horizontal) ===== */
+    .rec-feed {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 0 16px 4px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .rec-feed::-webkit-scrollbar { display: none; }
+
+    .rec-card {
+      flex-shrink: 0;
+      width: 170px;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .rec-card:active { transform: scale(0.97); }
+
+    .rec-emoji {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .rec-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .rec-reason {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .rec-chip {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    /* ===== POPULAR SECTION ===== */
+    .popular-card {
+      margin: 0 16px 10px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .popular-card:active { transform: scale(0.98); }
+
+    .popular-rank {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .popular-rank.gold { color: var(--amber); }
+    .popular-rank.silver { color: #c0c0c0; }
+    .popular-rank.bronze { color: #cd7f32; }
+
+    .popular-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .popular-info { flex: 1; }
+
+    .popular-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .popular-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .popular-plays {
+      font-size: 12px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    /* ===== CATEGORY CHIPS (returning user) ===== */
+    .category-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 16px 4px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .category-chips::-webkit-scrollbar { display: none; }
+
+    .cat-chip {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: var(--radius-xs);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .cat-chip:active { transform: scale(0.96); }
+
+    .cat-chip-emoji { font-size: 16px; }
+
+    /* ===== STATE VISIBILITY ===== */
+    .returning-only { display: none; }
+    .returning-only.visible { display: block; }
+    .returning-grid.visible { display: flex; }
+    .new-only { display: block; }
+    .new-only.hidden { display: none; }
+    .new-grid { display: grid; }
+    .new-grid.hidden { display: none; }
+
+    /* ===== TAB BAR ===== */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 393px;
+      width: 100%;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding: 8px 0 24px;
+      z-index: 50;
+    }
+
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .tab-item.active { color: var(--teal); }
+
+    .tab-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tab-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in { animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* BG helpers */
+    .bg-blue { background: var(--blue-dark); }
+    .bg-purple { background: var(--purple); }
+    .bg-green { background: var(--green-dark); }
+    .bg-amber { background: var(--amber-dark); }
+    .bg-red { background: var(--red-dark); }
+    .bg-teal { background: rgba(6,182,212,0.12); }
+    .bg-surface { background: var(--surface); }
+  </style>
+</head>
+<body>
+
+  <!-- State toggle -->
+  <div class="state-toggle">
+    <button id="btn-new" class="active" onclick="setState('new')">New User</button>
+    <button id="btn-returning" onclick="setState('returning')">Returning User</button>
+  </div>
+
+  <div class="back-link">
+    <a href="index.html">&larr; Back to options</a>
+  </div>
+
+  <div class="phone-content">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="6" width="3" height="6" rx="1" fill="#e5e5e5"/><rect x="4.5" y="4" width="3" height="8" rx="1" fill="#e5e5e5"/><rect x="9" y="2" width="3" height="10" rx="1" fill="#e5e5e5"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#e5e5e5"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3C10.7 3 13.1 4.2 14.7 6.1L16 4.8C14 2.5 11.2 1 8 1S2 2.5 0 4.8L1.3 6.1C2.9 4.2 5.3 3 8 3Z" fill="#e5e5e5"/><path d="M8 7C9.5 7 10.8 7.6 11.8 8.5L13.1 7.2C11.7 5.9 9.9 5 8 5S4.3 5.9 2.9 7.2L4.2 8.5C5.2 7.6 6.5 7 8 7Z" fill="#e5e5e5"/><circle cx="8" cy="11" r="1.5" fill="#e5e5e5"/></svg>
+        <svg width="27" height="12" viewBox="0 0 27 12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#e5e5e5" stroke-width="1" fill="none"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#e5e5e5"/><rect x="2" y="3" width="16" height="6" rx="1" fill="#e5e5e5"/></svg>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <h1>Practice</h1>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+      <span>Search quizzes, topics, subjects...</span>
+    </div>
+
+    <!-- Daily Quiz (compact) -->
+    <div class="daily-quiz-compact">
+      <div class="dq-glow"></div>
+      <div class="dq-inner">
+        <div class="dq-content">
+          <div class="dq-badge">🏆 Daily Challenge</div>
+          <div class="dq-title">Win <span class="pro">PRO</span> Every Day</div>
+          <div class="dq-timer">8h 30m left · 2.5K playing</div>
+        </div>
+        <button class="dq-play">Play</button>
+      </div>
+      <div class="dq-subjects">
+        <div class="dq-subject-chip active">🧠 Psychology</div>
+        <div class="dq-subject-chip">📐 Math</div>
+        <div class="dq-subject-chip">🌿 Biology</div>
+        <div class="dq-subject-chip">📜 History</div>
+        <div class="dq-subject-chip">🧪 Chemistry</div>
+      </div>
+    </div>
+
+    <!-- ===== RETURNING: Stats Dashboard ===== -->
+    <div class="returning-only" id="stats-section">
+      <div class="stats-dashboard fade-in">
+        <div class="stat-item">
+          <div class="stat-value teal">12</div>
+          <div class="stat-label">Quizzes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value amber">5 🔥</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value green">78%</div>
+          <div class="stat-label">Accuracy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RETURNING: Continue Where You Left Off ===== -->
+    <div class="returning-only" id="continue-section">
+      <div class="section-header">
+        <span class="section-title">Continue Where You Left Off</span>
+      </div>
+
+      <div class="continue-card" style="border-left: 3px solid var(--teal);">
+        <div class="continue-icon bg-blue">📖</div>
+        <div class="continue-info">
+          <div class="continue-title">English B2 Vocabulary</div>
+          <div class="continue-meta">32 of 50 words mastered</div>
+          <div class="progress-bar"><div class="progress-fill teal" style="width:65%"></div></div>
+        </div>
+        <span class="continue-pct teal">65%</span>
+        <span class="continue-arrow">›</span>
+      </div>
+
+      <div class="continue-card" style="border-left: 3px solid var(--purple-bright);">
+        <div class="continue-icon bg-purple">🧬</div>
+        <div class="continue-info">
+          <div class="continue-title">Biology Ch.5 — Active Recall</div>
+          <div class="continue-meta">5 of 15 questions done</div>
+          <div class="progress-bar"><div class="progress-fill purple" style="width:30%"></div></div>
+        </div>
+        <span class="continue-pct purple">30%</span>
+        <span class="continue-arrow">›</span>
+      </div>
+
+      <div class="continue-card" style="border-left: 3px solid var(--green);">
+        <div class="continue-icon bg-green">📐</div>
+        <div class="continue-info">
+          <div class="continue-title">Algebra — Practice Test</div>
+          <div class="continue-meta">8 of 10 problems solved</div>
+          <div class="progress-bar"><div class="progress-fill green" style="width:80%"></div></div>
+        </div>
+        <span class="continue-pct green">80%</span>
+        <span class="continue-arrow">›</span>
+      </div>
+    </div>
+
+    <!-- ===== RETURNING: Recommended for You ===== -->
+    <div class="returning-only" id="rec-section">
+      <div class="section-header">
+        <span class="section-title">Recommended for You</span>
+        <span class="section-link">See all ›</span>
+      </div>
+      <div class="rec-feed">
+        <div class="rec-card bg-blue">
+          <div class="rec-emoji">🎯</div>
+          <div class="rec-title">Advanced English Vocab</div>
+          <div class="rec-reason">Based on your B2 progress</div>
+          <div class="rec-chip" style="background:rgba(6,182,212,0.15); color:var(--teal);">Vocabulary</div>
+        </div>
+        <div class="rec-card bg-purple">
+          <div class="rec-emoji">🔬</div>
+          <div class="rec-title">Cell Division Quiz</div>
+          <div class="rec-reason">Next up in Biology</div>
+          <div class="rec-chip" style="background:rgba(139,92,246,0.15); color:var(--purple-bright);">Active Recall</div>
+        </div>
+        <div class="rec-card bg-green">
+          <div class="rec-emoji">📊</div>
+          <div class="rec-title">Calculus Basics</div>
+          <div class="rec-reason">You aced Algebra!</div>
+          <div class="rec-chip" style="background:rgba(34,197,94,0.15); color:var(--green);">Math</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NEW USER: Category Grid ===== -->
+    <div class="new-only" id="category-grid-section">
+      <div class="section-header">
+        <span class="section-title">What do you want to practice?</span>
+      </div>
+
+      <div class="category-grid new-grid" id="category-grid">
+        <div class="category-card bg-blue">
+          <div class="cat-glow" style="background: radial-gradient(circle, rgba(6,182,212,0.5) 0%, transparent 70%);"></div>
+          <div class="cat-emoji">📖</div>
+          <div class="cat-name">Vocabulary</div>
+          <div class="cat-count">120+ quizzes</div>
+        </div>
+        <div class="category-card bg-purple">
+          <div class="cat-glow" style="background: radial-gradient(circle, rgba(139,92,246,0.5) 0%, transparent 70%);"></div>
+          <div class="cat-emoji">🧠</div>
+          <div class="cat-name">Active Recall</div>
+          <div class="cat-count">85+ quizzes</div>
+        </div>
+        <div class="category-card bg-green">
+          <div class="cat-glow" style="background: radial-gradient(circle, rgba(34,197,94,0.5) 0%, transparent 70%);"></div>
+          <div class="cat-emoji">📐</div>
+          <div class="cat-name">Math Practice</div>
+          <div class="cat-count">200+ problems</div>
+        </div>
+        <div class="category-card bg-amber">
+          <div class="cat-glow" style="background: radial-gradient(circle, rgba(245,158,11,0.5) 0%, transparent 70%);"></div>
+          <div class="cat-emoji">🃏</div>
+          <div class="cat-name">Flashcards</div>
+          <div class="cat-count">150+ sets</div>
+        </div>
+        <div class="category-card bg-red">
+          <div class="cat-glow" style="background: radial-gradient(circle, rgba(239,68,68,0.5) 0%, transparent 70%);"></div>
+          <div class="cat-emoji">🎓</div>
+          <div class="cat-name">Exam Prep</div>
+          <div class="cat-count">By subject</div>
+        </div>
+        <div class="category-card" style="background: rgba(6,182,212,0.08);">
+          <div class="cat-glow" style="background: radial-gradient(circle, rgba(6,182,212,0.5) 0%, transparent 70%);"></div>
+          <div class="cat-emoji">🔬</div>
+          <div class="cat-name">Science Labs</div>
+          <div class="cat-count">60+ quizzes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RETURNING: Browse Categories (chips) ===== -->
+    <div class="returning-only" id="chips-section">
+      <div class="section-header">
+        <span class="section-title">Browse Categories</span>
+        <span class="section-link">See all ›</span>
+      </div>
+      <div class="category-chips">
+        <div class="cat-chip bg-blue">
+          <span class="cat-chip-emoji">📖</span> Vocabulary
+        </div>
+        <div class="cat-chip bg-purple">
+          <span class="cat-chip-emoji">🧠</span> Active Recall
+        </div>
+        <div class="cat-chip bg-green">
+          <span class="cat-chip-emoji">📐</span> Math
+        </div>
+        <div class="cat-chip bg-amber">
+          <span class="cat-chip-emoji">🃏</span> Flashcards
+        </div>
+        <div class="cat-chip bg-red">
+          <span class="cat-chip-emoji">🎓</span> Exam Prep
+        </div>
+        <div class="cat-chip bg-teal">
+          <span class="cat-chip-emoji">🔬</span> Science
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate CTA -->
+    <div class="generate-cta">
+      <div class="gen-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+      <div class="gen-text">
+        <div class="gen-title">Generate Your Own Quiz</div>
+        <div class="gen-subtitle">AI-powered — any topic you want</div>
+      </div>
+      <span class="gen-arrow">›</span>
+    </div>
+
+    <!-- Popular This Week -->
+    <div class="section-header">
+      <span class="section-title">Popular This Week</span>
+      <span class="section-link">See all ›</span>
+    </div>
+
+    <div class="popular-card">
+      <span class="popular-rank gold">1</span>
+      <div class="popular-icon bg-purple">🧬</div>
+      <div class="popular-info">
+        <div class="popular-name">Biology Midterm Prep</div>
+        <div class="popular-meta">30 questions · Active Recall</div>
+      </div>
+      <span class="popular-plays">2.3K</span>
+    </div>
+
+    <div class="popular-card">
+      <span class="popular-rank silver">2</span>
+      <div class="popular-icon bg-green">📐</div>
+      <div class="popular-info">
+        <div class="popular-name">Algebra Final Review</div>
+        <div class="popular-meta">25 problems · Math</div>
+      </div>
+      <span class="popular-plays">1.8K</span>
+    </div>
+
+    <div class="popular-card">
+      <span class="popular-rank bronze">3</span>
+      <div class="popular-icon bg-blue">🇬🇧</div>
+      <div class="popular-info">
+        <div class="popular-name">English C1 Vocab</div>
+        <div class="popular-meta">80 words · Vocabulary</div>
+      </div>
+      <span class="popular-plays">1.5K</span>
+    </div>
+
+    <div class="popular-card">
+      <span class="popular-rank">4</span>
+      <div class="popular-icon bg-amber">📜</div>
+      <div class="popular-info">
+        <div class="popular-name">World History — 20th Century</div>
+        <div class="popular-meta">40 questions · Exam Prep</div>
+      </div>
+      <span class="popular-plays">1.2K</span>
+    </div>
+
+    <div class="popular-card" style="margin-bottom: 20px;">
+      <span class="popular-rank">5</span>
+      <div class="popular-icon bg-purple">🧪</div>
+      <div class="popular-info">
+        <div class="popular-name">Chemistry — Periodic Table</div>
+        <div class="popular-meta">35 cards · Flashcards</div>
+      </div>
+      <span class="popular-plays">980</span>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <span>Home</span>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+      <span>Search</span>
+    </div>
+    <div class="tab-item active">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+      <span>Practice</span>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></div>
+      <span>Create</span>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <span>Profile</span>
+    </div>
+  </div>
+
+  <script>
+    function setState(state) {
+      const btnNew = document.getElementById('btn-new');
+      const btnRet = document.getElementById('btn-returning');
+      const returningEls = document.querySelectorAll('.returning-only');
+      const newOnlyEls = document.querySelectorAll('.new-only');
+      const newGrid = document.getElementById('category-grid');
+
+      if (state === 'returning') {
+        btnNew.classList.remove('active');
+        btnRet.classList.add('active');
+        returningEls.forEach(el => {
+          el.classList.add('visible');
+          el.classList.add('fade-in');
+        });
+        newOnlyEls.forEach(el => el.classList.add('hidden'));
+        if (newGrid) newGrid.classList.add('hidden');
+      } else {
+        btnRet.classList.remove('active');
+        btnNew.classList.add('active');
+        returningEls.forEach(el => {
+          el.classList.remove('visible');
+          el.classList.remove('fade-in');
+        });
+        newOnlyEls.forEach(el => el.classList.remove('hidden'));
+        if (newGrid) newGrid.classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
