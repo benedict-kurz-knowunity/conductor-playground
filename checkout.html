@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowunity — Konto erstellen & 30 Tage kostenlos testen</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .checkout-page {
+      min-height: 100vh;
+      background: var(--gradient-hero);
+      padding-top: 70px;
+    }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: var(--space-3xl);
+      align-items: start;
+      padding: var(--space-2xl) 0 var(--space-4xl);
+    }
+
+    /* Form sections */
+    .form-section {
+      background: var(--color-navy-light);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+    }
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .form-section-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gradient-cta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .form-section-header h3 {
+      font-size: 1.1rem;
+    }
+
+    .form-group { margin-bottom: var(--space-lg); }
+    .form-label {
+      display: block;
+      margin-bottom: var(--space-sm);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-white-80);
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--color-white-05);
+      border: 2px solid var(--color-white-10);
+      border-radius: var(--radius-md);
+      color: var(--color-white);
+      font-family: var(--font-primary);
+      font-size: 1rem;
+      transition: border-color var(--transition-fast);
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--color-blue); }
+    .form-input::placeholder { color: var(--color-white-40); }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+    }
+    .form-hint {
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+      margin-top: var(--space-xs);
+    }
+
+    /* Payment method tabs */
+    .payment-tabs {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .payment-tab {
+      flex: 1;
+      padding: 12px;
+      background: var(--color-white-05);
+      border: 2px solid var(--color-white-10);
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-white-60);
+    }
+    .payment-tab:hover { border-color: var(--color-white-20); }
+    .payment-tab.active {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.08);
+      color: var(--color-white);
+    }
+    .payment-tab .tab-icon { font-size: 1.3rem; display: block; margin-bottom: 4px; }
+
+    /* Card mockup */
+    .card-visual {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .card-visual .card-number {
+      font-family: monospace;
+      font-size: 1.2rem;
+      letter-spacing: 3px;
+      color: var(--color-white-80);
+      margin-bottom: var(--space-md);
+    }
+    .card-visual .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--color-white-60);
+    }
+
+    /* Sidebar summary */
+    .checkout-sidebar {
+      position: sticky;
+      top: calc(70px + var(--space-xl));
+    }
+    .summary-card {
+      background: var(--color-navy-light);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+    }
+    .summary-plan {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--color-white-10);
+      margin-bottom: var(--space-lg);
+    }
+    .summary-plan-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--gradient-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .summary-plan-name {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .summary-plan-desc {
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-sm) 0;
+      font-size: 0.9rem;
+      color: var(--color-white-60);
+    }
+    .summary-divider {
+      border-top: 1px solid var(--color-white-10);
+      margin: var(--space-md) 0;
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-white);
+    }
+    .summary-free {
+      background: rgba(0,200,83,0.1);
+      border: 1px solid rgba(0,200,83,0.2);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      text-align: center;
+      margin-top: var(--space-lg);
+    }
+    .summary-free .big {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-green);
+    }
+    .summary-free p {
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+      margin-top: 4px;
+    }
+
+    /* Trust & security */
+    .security-badges {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+      background: var(--color-white-05);
+      border-radius: var(--radius-lg);
+    }
+    .security-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      font-size: 0.85rem;
+      color: var(--color-white-60);
+    }
+    .security-badge .badge-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--color-blue);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .checkbox-group label {
+      font-size: 0.85rem;
+      color: var(--color-white-60);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1024px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+      .checkout-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">K</span>
+      Knowunity
+    </a>
+    <div class="nav-cta">
+      <span style="font-size:0.85rem; color:var(--color-white-40);">&#128274; Sichere Bezahlung</span>
+    </div>
+  </div>
+</nav>
+
+<div class="checkout-page">
+  <div class="container">
+    <div class="checkout-grid">
+
+      <!-- Left: Form -->
+      <div>
+        <!-- Section 1: Account -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-number">1</div>
+            <h3>Konto erstellen</h3>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Vorname</label>
+              <input type="text" class="form-input" placeholder="Ihr Vorname">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nachname</label>
+              <input type="text" class="form-input" placeholder="Ihr Nachname">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">E-Mail-Adresse</label>
+            <input type="email" class="form-input" placeholder="ihre@email.de">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Passwort</label>
+            <input type="password" class="form-input" placeholder="Mindestens 8 Zeichen">
+            <div class="form-hint">Min. 8 Zeichen, 1 Großbuchstabe, 1 Zahl</div>
+          </div>
+        </div>
+
+        <!-- Section 2: Child Info -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-number">2</div>
+            <h3>Kind einrichten</h3>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Name des Kindes</label>
+              <input type="text" class="form-input" placeholder="Vorname">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Klassenstufe</label>
+              <select class="form-input" style="appearance:auto;">
+                <option value="">Bitte wählen</option>
+                <option>Klasse 1-4</option>
+                <option>Klasse 5-6</option>
+                <option>Klasse 7-8</option>
+                <option>Klasse 9-10</option>
+                <option>Oberstufe (11-13)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hauptfächer für den KI-Tutor (optional)</label>
+            <input type="text" class="form-input" placeholder="z.B. Mathe, Englisch, Physik">
+            <div class="form-hint">Sie können dies später jederzeit ändern.</div>
+          </div>
+        </div>
+
+        <!-- Section 3: Payment -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-number">3</div>
+            <h3>Zahlungsmethode</h3>
+          </div>
+
+          <div class="payment-tabs">
+            <div class="payment-tab active" onclick="selectPayment(this)">
+              <span class="tab-icon">&#128179;</span> Kreditkarte
+            </div>
+            <div class="payment-tab" onclick="selectPayment(this)">
+              <span class="tab-icon">&#127974;</span> SEPA-Lastschrift
+            </div>
+            <div class="payment-tab" onclick="selectPayment(this)">
+              <span class="tab-icon">&#128230;</span> PayPal
+            </div>
+          </div>
+
+          <div id="creditCardForm">
+            <div class="card-visual">
+              <div class="card-number">**** **** **** ****</div>
+              <div class="card-meta">
+                <span>KARTENINHABER</span>
+                <span>MM/JJ</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Kartennummer</label>
+              <input type="text" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Gültig bis</label>
+                <input type="text" class="form-input" placeholder="MM / JJ" maxlength="7">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CVV</label>
+                <input type="text" class="form-input" placeholder="123" maxlength="4">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Name auf der Karte</label>
+              <input type="text" class="form-input" placeholder="Wie auf der Karte">
+            </div>
+          </div>
+
+          <div class="form-hint" style="margin-top:var(--space-sm);">
+            &#128274; Ihre Zahlungsdaten werden SSL-verschlüsselt übertragen und sicher verarbeitet.
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div style="padding: 0 var(--space-md);">
+          <div class="checkbox-group mb-lg">
+            <input type="checkbox" id="terms">
+            <label for="terms">
+              Ich stimme den <a href="#">AGB</a> und der <a href="#">Widerrufsbelehrung</a> zu.
+              Ich verstehe, dass die Testphase 30 Tage kostenlos ist und ich jederzeit kündigen kann.
+            </label>
+          </div>
+          <div class="checkbox-group mb-xl">
+            <input type="checkbox" id="newsletter">
+            <label for="newsletter">
+              Ich möchte Tipps und Updates per E-Mail erhalten (optional).
+            </label>
+          </div>
+
+          <button class="btn btn-lg btn-green" style="width:100%;" onclick="showConfirmation()">
+            Jetzt 30 Tage kostenlos starten &#128640;
+          </button>
+          <div style="text-align:center; margin-top:var(--space-md); font-size:0.8rem; color:var(--color-white-40);">
+            Erste Zahlung erst nach 30 Tagen &middot; Jederzeit kündbar
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Sidebar -->
+      <div class="checkout-sidebar">
+        <div class="summary-card">
+          <h4 style="margin-bottom:var(--space-lg);">Bestellübersicht</h4>
+
+          <div class="summary-plan">
+            <div class="summary-plan-icon">&#11088;</div>
+            <div>
+              <div class="summary-plan-name">Knowunity Pro</div>
+              <div class="summary-plan-desc">Jahresabo &middot; 10 &euro;/Mo.</div>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span>Knowunity Pro (Jahresabo)</span>
+            <span>19,99 &euro;/Mo.</span>
+          </div>
+          <div class="summary-row">
+            <span style="color:var(--color-green);">Willkommensrabatt (–50%)</span>
+            <span style="color:var(--color-green);">–9,99 &euro;</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-total">
+            <span>Gesamt nach Testphase</span>
+            <span>10,00 &euro;/Mo.</span>
+          </div>
+          <div style="font-size:0.8rem; color:var(--color-white-40); margin-top:var(--space-sm);">
+            120 &euro;/Jahr, jährlich abgerechnet
+          </div>
+
+          <div class="summary-free">
+            <div class="big">0,00 &euro; heute</div>
+            <p>30 Tage kostenlos testen — jederzeit kündbar</p>
+          </div>
+        </div>
+
+        <div class="security-badges">
+          <div class="security-badge">
+            <span class="badge-icon">&#128274;</span>
+            <span>256-Bit SSL-Verschlüsselung</span>
+          </div>
+          <div class="security-badge">
+            <span class="badge-icon">&#128737;</span>
+            <span>DSGVO-konform & Datenschutz-zertifiziert</span>
+          </div>
+          <div class="security-badge">
+            <span class="badge-icon">&#9989;</span>
+            <span>30 Tage kostenlos — keine versteckten Kosten</span>
+          </div>
+          <div class="security-badge">
+            <span class="badge-icon">&#128260;</span>
+            <span>Mit einem Klick kündbar — direkt in der App</span>
+          </div>
+          <div class="security-badge">
+            <span class="badge-icon">&#127942;</span>
+            <span>Über 5 Mio. Schüler vertrauen Knowunity</span>
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div style="margin-top:var(--space-lg); padding:var(--space-lg); background:var(--color-white-05); border-radius:var(--radius-lg);">
+          <div style="color:#ffc107; margin-bottom:var(--space-sm);">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p style="font-size:0.85rem; color:var(--color-white-60); font-style:italic; line-height:1.6; margin-bottom:var(--space-md);">
+            &laquo;Beste Investition für meine Kinder. Der KI-Tutor erklärt geduldig und verständlich. Nachhilfe haben wir komplett abbestellt!&raquo;
+          </p>
+          <div style="display:flex; align-items:center; gap:var(--space-sm);">
+            <div style="width:32px; height:32px; border-radius:50%; background:var(--gradient-blue); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700;">TM</div>
+            <div>
+              <div style="font-size:0.8rem; font-weight:600;">Thomas M.</div>
+              <div style="font-size:0.7rem; color:var(--color-white-40);">Vater, 2 Kinder</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal (hidden) -->
+<div id="successModal" style="display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.7); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center;">
+  <div style="background:var(--color-navy-light); border:1px solid var(--color-white-10); border-radius:var(--radius-2xl); padding:var(--space-3xl); max-width:500px; width:90%; text-align:center;">
+    <div style="font-size:4rem; margin-bottom:var(--space-lg);">&#127881;</div>
+    <h2 style="margin-bottom:var(--space-md);">Willkommen bei Knowunity!</h2>
+    <p style="color:var(--color-white-60); margin-bottom:var(--space-xl);">
+      Ihr Konto wurde erstellt. Ihre 30-tägige kostenlose Testphase beginnt jetzt.
+      Laden Sie die App herunter und Ihr Kind kann sofort loslegen!
+    </p>
+    <div style="display:flex; gap:var(--space-md); justify-content:center; margin-bottom:var(--space-lg);">
+      <a href="#" class="btn btn-blue">&#127822; App Store</a>
+      <a href="#" class="btn btn-blue">&#9654; Google Play</a>
+    </div>
+    <p style="font-size:0.8rem; color:var(--color-white-40);">
+      Wir haben Ihnen eine Bestätigungs-E-Mail gesendet.
+    </p>
+  </div>
+</div>
+
+<script>
+  function selectPayment(el) {
+    document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function showConfirmation() {
+    const modal = document.getElementById('successModal');
+    modal.style.display = 'flex';
+  }
+
+  // Read plan from URL
+  const params = new URLSearchParams(window.location.search);
+  const plan = params.get('plan');
+  if (plan) {
+    const planNames = { basis: 'Basis', pro: 'Pro', familie: 'Familie' };
+    const planPrices = { basis: '10,00', pro: '10,00', familie: '10,00' };
+    const planOriginal = { basis: '19,99', pro: '19,99', familie: '19,99' };
+    const planDiscount = { basis: '9,99', pro: '9,99', familie: '9,99' };
+    const planDesc = {
+      basis: 'Jahresabo \u00B7 10 \u20AC/Mo.',
+      pro: 'Jahresabo \u00B7 10 \u20AC/Mo.',
+      familie: 'Jahresabo \u00B7 10 \u20AC/Mo.'
+    };
+
+    if (planNames[plan]) {
+      document.querySelector('.summary-plan-name').textContent = `Knowunity ${planNames[plan]}`;
+      document.querySelector('.summary-plan-desc').textContent = planDesc[plan];
+      document.querySelectorAll('.summary-row')[0].querySelector('span:last-child').textContent = `${planOriginal[plan]} \u20AC`;
+      document.querySelectorAll('.summary-row')[1].querySelector('span:last-child').textContent = `-${planDiscount[plan]} \u20AC`;
+      document.querySelector('.summary-total span:last-child').textContent = `${planPrices[plan]} \u20AC/Mo.`;
+    }
+  }
+</script>
+
+</body>
+</html>
