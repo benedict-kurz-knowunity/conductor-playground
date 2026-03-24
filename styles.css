@@ -7,13 +7,13 @@
 
 /* --- Design Tokens --- */
 :root {
-  /* Colors */
-  --color-navy: #14183a;
-  --color-navy-light: #1c2148;
-  --color-navy-lighter: #252a54;
-  --color-indigo: #3f51b5;
+  /* Colors — Knowunity Brand */
+  --color-navy: #053154;
+  --color-navy-light: #0a3d66;
+  --color-navy-lighter: #104a78;
+  --color-indigo: #14183a;
   --color-blue: #008DE8;
-  --color-blue-light: #33a4ed;
+  --color-blue-light: #60A5FA;
   --color-blue-dark: #0070b8;
   --color-purple: #40425d;
   --color-green: #00c853;
@@ -27,13 +27,13 @@
   --color-white-20: rgba(255, 255, 255, 0.2);
   --color-white-10: rgba(255, 255, 255, 0.1);
   --color-white-05: rgba(255, 255, 255, 0.05);
-  --color-dark-bg: #0d1029;
+  --color-dark-bg: #042845;
   --color-card-bg: rgba(255, 255, 255, 0.06);
   --color-card-border: rgba(255, 255, 255, 0.1);
 
-  /* Gradients */
-  --gradient-hero: radial-gradient(52.34% 100% at 50% 0%, #3f51b5 0%, #14183a 100%);
-  --gradient-blue: linear-gradient(135deg, #008DE8 0%, #3f51b5 100%);
+  /* Gradients — Knowunity Brand */
+  --gradient-hero: radial-gradient(52.34% 100% at 50% 0%, #008DE8 0%, #053154 100%);
+  --gradient-blue: linear-gradient(135deg, #008DE8 0%, #053154 100%);
   --gradient-cta: linear-gradient(135deg, #008DE8 0%, #0070b8 100%);
   --gradient-green: linear-gradient(135deg, #00c853 0%, #00a844 100%);
   --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
@@ -219,7 +219,7 @@ h4 {
   align-items: center;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  background: rgba(20, 24, 58, 0.85);
+  background: rgba(5, 49, 84, 0.85);
   border-bottom: 1px solid var(--color-white-10);
   transition: background var(--transition-base);
 }
@@ -515,7 +515,7 @@ h4 {
 .hero-phone-screen {
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #1a1f4e 0%, #14183a 100%);
+  background: linear-gradient(180deg, #0a3d66 0%, #053154 100%);
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
