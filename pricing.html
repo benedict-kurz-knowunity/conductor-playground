@@ -13,20 +13,20 @@
     }
     .pricing-hero {
       text-align: center;
-      padding: var(--space-lg) 0 0;
+      padding: var(--space-sm) 0 0;
     }
     .pricing-hero .discount-badge {
       display: inline-flex;
       align-items: center;
       gap: var(--space-sm);
-      padding: 8px 20px;
+      padding: 6px 16px;
       background: rgba(0, 200, 83, 0.15);
       border: 1px solid rgba(0, 200, 83, 0.3);
       border-radius: var(--radius-pill);
       color: var(--color-green);
       font-weight: 700;
-      font-size: 0.9rem;
-      margin-bottom: var(--space-lg);
+      font-size: 0.85rem;
+      margin-bottom: var(--space-sm);
     }
 
     /* Trust badges — Sofatutor style */
@@ -63,7 +63,7 @@
       background: var(--color-navy-light);
       border: 2px solid rgba(0,141,232,0.3);
       border-radius: var(--radius-2xl);
-      padding: var(--space-2xl);
+      padding: var(--space-xl) var(--space-lg);
       position: relative;
       overflow: hidden;
     }
@@ -76,28 +76,28 @@
     }
     .plan-popular {
       display: inline-block;
-      padding: 6px 16px;
+      padding: 5px 14px;
       background: var(--gradient-cta);
       border-radius: var(--radius-pill);
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: var(--space-lg);
-    }
-    .plan-name {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
+      font-size: 0.75rem;
       font-weight: 700;
       margin-bottom: var(--space-sm);
     }
+    .plan-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
     .plan-price {
       font-family: var(--font-display);
-      font-size: 3.5rem;
+      font-size: 3rem;
       font-weight: 800;
       line-height: 1;
-      margin-bottom: var(--space-xs);
+      margin-bottom: 2px;
     }
-    .plan-price .currency { font-size: 1.8rem; vertical-align: super; }
-    .plan-price .period { font-size: 1rem; font-weight: 500; color: var(--color-white-60); }
+    .plan-price .currency { font-size: 1.5rem; vertical-align: super; }
+    .plan-price .period { font-size: 0.9rem; font-weight: 500; color: var(--color-white-60); }
     .plan-original {
       font-size: 0.9rem;
       color: var(--color-white-40);
@@ -117,22 +117,27 @@
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--color-blue-light);
-      margin-bottom: var(--space-xl);
+      margin-bottom: var(--space-md);
     }
     .plan-features {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: var(--space-md);
-      margin-bottom: var(--space-xl);
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
       text-align: left;
     }
     .plan-features li {
       display: flex;
       align-items: center;
       gap: var(--space-sm);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--color-white-80);
+    }
+    /* On mobile: show only first 3 features, rest behind toggle */
+    @media (max-width: 768px) {
+      .plan-features li:nth-child(n+4) { display: none; }
+      .plan-features.expanded li:nth-child(n+4) { display: flex; }
     }
     .plan-features li .icon { color: var(--color-green); font-weight: 700; flex-shrink: 0; }
     .plan-cta-note {
@@ -280,6 +285,17 @@
     .guarantee p { color: var(--color-white-60); font-size: 0.95rem; line-height: 1.6; }
 
     @media (max-width: 768px) {
+      .pricing-page { padding-top: 56px; }
+      .pricing-hero { padding: var(--space-xs) 0 0; }
+      .plan-card { padding: var(--space-md) var(--space-md); }
+      .plan-popular { margin-bottom: var(--space-xs); }
+      .plan-price { font-size: 2.5rem; }
+      .plan-price .currency { font-size: 1.3rem; }
+      .plan-cheaper { margin-bottom: var(--space-sm); }
+      .plan-features { gap: 6px; margin-bottom: var(--space-sm); }
+      .plan-features li { font-size: 0.85rem; }
+      .plan-card-wrapper { margin-top: var(--space-sm) !important; }
+      .show-more-features { display: block !important; }
       .trust-badges-row { gap: var(--space-lg); }
       .impact-grid { grid-template-columns: 1fr; }
       .ptestimonial-grid { grid-template-columns: 1fr; }
@@ -329,7 +345,7 @@
           <div class="plan-cheaper">Günstiger als eine einzige Nachhilfestunde</div>
         </div>
 
-        <ul class="plan-features">
+        <ul class="plan-features" id="planFeatures">
           <li><span class="icon">&#10003;</span> <strong>Unbegrenzter KI-Tutor</strong> — erklärt in jedem Fach</li>
           <li><span class="icon">&#10003;</span> Persönlicher Lernplan, angepasst an Niveau & Ziele</li>
           <li><span class="icon">&#10003;</span> 1,5 Mio+ verifizierte Lerninhalte</li>
@@ -339,6 +355,7 @@
           <li><span class="icon">&#10003;</span> Prüfungsvorbereitung (Abitur, MSA & mehr)</li>
           <li><span class="icon">&#10003;</span> Sicher & DSGVO-konform</li>
         </ul>
+        <div class="show-more-features" id="showMoreBtn" onclick="document.getElementById('planFeatures').classList.add('expanded'); this.style.display='none';" style="text-align:center; margin-bottom:var(--space-md); font-size:0.8rem; color:var(--color-blue-light); cursor:pointer; display:none;">+ 5 weitere Vorteile anzeigen</div>
 
         <a href="checkout.html?plan=pro" class="btn btn-lg btn-green" style="width:100%; font-size:1.05rem;">
           30 Tage kostenlos testen &rarr;
