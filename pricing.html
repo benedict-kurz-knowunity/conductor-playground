@@ -13,7 +13,7 @@
     }
     .pricing-hero {
       text-align: center;
-      padding: var(--space-2xl) 0 var(--space-lg);
+      padding: var(--space-lg) 0 0;
     }
     .pricing-hero .discount-badge {
       display: inline-flex;
@@ -306,48 +306,17 @@
 <div class="pricing-page">
   <div class="container">
 
-    <!-- Hero -->
-    <div class="pricing-hero">
+    <!-- Hero — compact, card-first layout -->
+    <div class="pricing-hero" style="padding-bottom:0;">
       <div class="discount-badge">&#127881; 50% Rabatt — Nur für kurze Zeit</div>
-      <h1>Die erste KI, die deinem Kind wirklich was erklärt</h1>
-      <p class="text-muted" style="max-width:550px; margin:var(--space-md) auto 0; font-size:1.05rem;">
-        90% günstiger als klassische Nachhilfe. 30 Tage kostenlos testen — jederzeit kündbar.
-      </p>
-
-      <!-- Trust badges — Sofatutor pattern -->
-      <div class="trust-badges-row">
-        <div class="trust-badge-item">
-          <div class="trust-badge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div class="trust-badge-score">4.7</div>
-          <div class="trust-badge-source">App Store</div>
-          <div class="trust-badge-count">100.000+ Bewertungen</div>
-        </div>
-        <div class="trust-badge-item">
-          <div class="trust-badge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div class="trust-badge-score">4.8</div>
-          <div class="trust-badge-source">Google Play</div>
-          <div class="trust-badge-count">25.000+ Bewertungen</div>
-        </div>
-        <div class="trust-badge-item">
-          <div class="trust-badge-score" style="color:var(--color-green);">97%</div>
-          <div class="trust-badge-source">verbessern ihre Noten</div>
-          <div class="trust-badge-count">basierend auf Nutzerbefragung</div>
-        </div>
-        <div class="trust-badge-item">
-          <div class="trust-badge-score">5 Mio+</div>
-          <div class="trust-badge-source">aktive Schüler</div>
-          <div class="trust-badge-count">#1 Bildungs-App DE</div>
-        </div>
-      </div>
-
-      <div class="last-purchase">
+      <div class="last-purchase" style="margin-top:var(--space-sm);">
         <span class="live-dot"></span>
         <span id="lastPurchase">Letzter Kauf: vor 2 Minuten</span>
       </div>
     </div>
 
-    <!-- Single Plan Card -->
-    <div class="plan-card-wrapper">
+    <!-- Single Plan Card — immediately visible -->
+    <div class="plan-card-wrapper" style="margin-top:var(--space-lg);">
       <div class="plan-card">
         <div style="text-align:center;">
           <div class="plan-popular">&#11088; Empfohlen für Eltern</div>
@@ -377,6 +346,32 @@
         <div class="plan-cta-note">
           Erste Zahlung erst nach 30 Tagen · Jederzeit mit einem Klick kündbar
         </div>
+      </div>
+    </div>
+
+    <!-- Trust badges — below card -->
+    <div class="trust-badges-row">
+      <div class="trust-badge-item">
+        <div class="trust-badge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="trust-badge-score">4.7</div>
+        <div class="trust-badge-source">App Store</div>
+        <div class="trust-badge-count">100.000+ Bewertungen</div>
+      </div>
+      <div class="trust-badge-item">
+        <div class="trust-badge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="trust-badge-score">4.8</div>
+        <div class="trust-badge-source">Google Play</div>
+        <div class="trust-badge-count">25.000+ Bewertungen</div>
+      </div>
+      <div class="trust-badge-item">
+        <div class="trust-badge-score" style="color:var(--color-green);">97%</div>
+        <div class="trust-badge-source">verbessern ihre Noten</div>
+        <div class="trust-badge-count">basierend auf Nutzerbefragung</div>
+      </div>
+      <div class="trust-badge-item">
+        <div class="trust-badge-score">30 Mio+</div>
+        <div class="trust-badge-source">aktive Schüler</div>
+        <div class="trust-badge-count">#1 Bildungs-App DE</div>
       </div>
     </div>
 
