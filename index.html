@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowunity für Eltern — Die erste KI, die deinem Kind wirklich was erklärt</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hero {
+      background: linear-gradient(180deg, #008DE8 0%, #0070b8 60%, var(--color-navy) 100%);
+      padding-top: 100px;
+      padding-bottom: var(--space-3xl);
+    }
+    .hero h1 { color: var(--color-white); }
+    .hero h1 em { font-style: normal; }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+    }
+    .subject-tile {
+      background: var(--color-white-05);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+    .subject-tile:hover {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.08);
+      transform: translateY(-2px);
+    }
+    .subject-tile .icon { font-size: 2rem; margin-bottom: var(--space-sm); }
+    .subject-tile .label { font-size: 0.9rem; font-weight: 600; color: var(--color-white-80); }
+
+    .ai-demo-window {
+      background: var(--color-navy-light);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .ai-demo-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-white-05);
+      border-bottom: 1px solid var(--color-white-10);
+    }
+    .ai-demo-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .ai-demo-body {
+      padding: var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .comparison-section { overflow-x: auto; }
+    @media (max-width: 768px) {
+      .subject-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">K</span>
+      Knowunity
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Funktionen</a></li>
+      <li><a href="#ai">KI-Tutor</a></li>
+      <li><a href="#testimonials">Erfahrungen</a></li>
+      <li><a href="#pricing">Preise</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="quiz.html" class="btn btn-sm btn-blue">Kostenlos testen</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Von über 5 Millionen Schülern genutzt
+        </div>
+        <h1>Die erste KI, die deinem Kind wirklich was erklärt</h1>
+        <p class="hero-subtitle" style="color: rgba(255,255,255,0.85);">
+          Der #1 Lernbegleiter — Klasse 5 bis 13, alle Fächer.
+          90% günstiger und 100% persönlicher als jede klassische Nachhilfe.
+        </p>
+        <div class="hero-ctas">
+          <a href="quiz.html" class="btn btn-lg" style="background:white; color:#008DE8; font-weight:700;">Jetzt kostenlos testen</a>
+        </div>
+        <div class="hero-trust" style="color: rgba(255,255,255,0.7);">
+          <span class="hero-trust-item">&#9733; 97% bessere Noten</span>
+          <span class="hero-trust-item">&#10003; Lehrplan-konform</span>
+          <span class="hero-trust-item">&#128274; DSGVO-konform</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-phone">
+          <div class="hero-phone-screen">
+            <div class="phone-header">
+              <div class="avatar">&#129302;</div>
+              <h4>KI-Tutor</h4>
+              <p>Dein persönlicher Lernbegleiter</p>
+            </div>
+            <div class="phone-chat">
+              <div class="chat-bubble chat-bubble-user">Ich verstehe Bruchrechnung nicht &#128557;</div>
+              <div class="chat-bubble chat-bubble-ai">Kein Problem! Stell dir eine Pizza vor, die du mit Freunden teilst. Wenn du 1/4 nimmst, bekommst du...</div>
+              <div class="chat-bubble chat-bubble-user">Achso! Und was ist 1/4 + 1/2?</div>
+              <div class="chat-bubble chat-bubble-ai">Super Frage! Wir brauchen den gleichen Nenner. 1/2 = 2/4, also ist 1/4 + 2/4 = 3/4 &#127881;</div>
+            </div>
+          </div>
+        </div>
+        <div class="float-card float-card-1">
+          &#128200; Mathe-Note: 2 &rarr; 1
+        </div>
+        <div class="float-card float-card-2">
+          &#128218; 1,5 Mio+ Lerninhalte
+        </div>
+        <div class="float-card float-card-3">
+          &#129303; 5 Mio+ Schüler
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Social Proof Bar -->
+<div class="social-proof-bar">
+  <div class="container">
+    <div class="proof-items">
+      <div class="proof-item">
+        <div class="proof-number">5 Mio+</div>
+        <div class="proof-label">Aktive Schüler</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-number">1,5 Mio+</div>
+        <div class="proof-label">Verifizierte Lerninhalte</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-number">4.7 &#9733;</div>
+        <div class="proof-label">App Store Bewertung</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-number">#1</div>
+        <div class="proof-label">Bildungs-App in Deutschland</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-number">97%</div>
+        <div class="proof-label">verbessern ihre Noten</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Key Benefits — matching Knowunity parents page -->
+<section class="section" id="stats">
+  <div class="container">
+    <h2 class="text-center mb-lg">Die #1 KI-Lernplattform, der Eltern vertrauen</h2>
+    <p class="text-center text-muted mb-2xl" style="max-width:600px; margin-left:auto; margin-right:auto;">
+      90% günstiger und 100% persönlicher als jede klassische Nachhilfe.
+    </p>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">&#129302;</div>
+        <div class="stat-number">Individuelle Hilfe</div>
+        <div class="stat-label">Jeder Schüler bekommt 1:1 Hilfe von unserem hochwertigen KI-Tutor, vollständig personalisiert auf das Lernziel und Niveau.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">&#9200;</div>
+        <div class="stat-number">Unbegrenzter Zugang 24/7</div>
+        <div class="stat-label">Unsere geprüften Inhalte und interaktiven Lernformate (Quizze, Hausaufgaben und mehr) sind jederzeit verfügbar.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">&#128274;</div>
+        <div class="stat-number">Sicheres Online-Lernen</div>
+        <div class="stat-label">Wir bieten eine sichere Lernumgebung für jeden Schüler und nehmen Datenschutz und Transparenz sehr ernst.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature 1: AI Tutor -->
+<section class="section" id="ai" style="background: var(--color-dark-bg);">
+  <div class="container">
+    <div class="feature-row">
+      <div class="feature-text">
+        <span class="feature-tag">&#10024; KI-Lernhilfe</span>
+        <h2>Die erste KI, die wirklich erklärt — nicht nur antwortet</h2>
+        <p>
+          Anders als ChatGPT wurde Knowunitys KI speziell für Schüler entwickelt.
+          Sie erklärt Schritt für Schritt, passt sich dem Lerntempo an und lernt
+          aus Millionen von Lernzetteln, die von Top-Schülern erstellt wurden.
+        </p>
+        <ul class="feature-list">
+          <li><span class="check">&#10003;</span> Persönliche Erklärungen auf dem Niveau Ihres Kindes</li>
+          <li><span class="check">&#10003;</span> Schritt-für-Schritt-Lösungswege statt fertige Antworten</li>
+          <li><span class="check">&#10003;</span> Sprachfunktion für intuitives Lernen</li>
+          <li><span class="check">&#10003;</span> Eigene Lernmaterialien hochladen & verstehen</li>
+          <li><span class="check">&#10003;</span> Auf den Lehrplan abgestimmt (Klasse 5–13)</li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="ai-demo-window">
+          <div class="ai-demo-header">
+            <div class="ai-demo-dot" style="background:#ff5f57;"></div>
+            <div class="ai-demo-dot" style="background:#ffbd2e;"></div>
+            <div class="ai-demo-dot" style="background:#28c840;"></div>
+            <span style="margin-left:auto; font-size:0.8rem; color:var(--color-white-40);">Knowunity KI-Tutor</span>
+          </div>
+          <div class="ai-demo-body">
+            <div class="chat-bubble chat-bubble-user" style="animation:none;opacity:1;">Wie berechne ich die Fläche eines Dreiecks?</div>
+            <div class="chat-bubble chat-bubble-ai" style="animation:none;opacity:1;">
+              Die Formel lautet: <strong>A = (Grundseite × Höhe) / 2</strong><br><br>
+              &#128161; Stell dir vor, du hast ein Rechteck. Ein Dreieck ist genau die Hälfte davon —
+              deshalb teilen wir durch 2!<br><br>
+              <strong>Beispiel:</strong> Grundseite = 6cm, Höhe = 4cm<br>
+              A = (6 × 4) / 2 = <strong>12 cm²</strong><br><br>
+              Möchtest du es mit eigenen Zahlen probieren? &#128640;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature 2: Community Content -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="feature-row reverse">
+      <div class="feature-text">
+        <span class="feature-tag">&#128101; 1,5 Mio+ Lerninhalte</span>
+        <h2>Lernen von Millionen Gleichaltrigen — verifiziert und bewertet</h2>
+        <p>
+          Was Knowunity einzigartig macht: Über 5 Millionen Schüler teilen ihre besten
+          Zusammenfassungen, Erklärungen und Tipps. Die KI lernt nicht aus trockenen
+          Lehrbüchern, sondern aus Lernzetteln von Top-Schülern — und erklärt so,
+          dass es wirklich ankommt.
+        </p>
+        <ul class="feature-list">
+          <li><span class="check">&#10003;</span> 1,5 Mio+ verifizierte Lerninhalte</li>
+          <li><span class="check">&#10003;</span> Zusammenfassungen, Karteikarten & Erklärungen</li>
+          <li><span class="check">&#10003;</span> Von der Community bewertet — nur das Beste kommt nach oben</li>
+          <li><span class="check">&#10003;</span> Alle Fächer, Klasse 5–13, alle Bundesländer</li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-mockup">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md);">
+            <span style="font-weight:700;">&#128293; Beliebte Inhalte</span>
+            <span style="font-size:0.8rem; color:var(--color-white-40);">Mathe, Klasse 10</span>
+          </div>
+          <div style="background:var(--color-white-05); border-radius:var(--radius-md); padding:var(--space-md); display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; font-size:0.9rem;">Quadratische Gleichungen</div>
+              <div style="font-size:0.8rem; color:var(--color-white-40);">von Lisa M. · &#9733; 4.9 · 12.4k Views</div>
+            </div>
+            <span style="font-size:1.5rem;">&#128196;</span>
+          </div>
+          <div style="background:var(--color-white-05); border-radius:var(--radius-md); padding:var(--space-md); display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; font-size:0.9rem;">Binomische Formeln – Zusammenfassung</div>
+              <div style="font-size:0.8rem; color:var(--color-white-40);">von Tim K. · &#9733; 4.8 · 8.7k Views</div>
+            </div>
+            <span style="font-size:1.5rem;">&#128196;</span>
+          </div>
+          <div style="background:var(--color-white-05); border-radius:var(--radius-md); padding:var(--space-md); display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; font-size:0.9rem;">Stochastik Karteikarten</div>
+              <div style="font-size:0.8rem; color:var(--color-white-40);">von Anna S. · &#9733; 4.7 · 5.2k Views</div>
+            </div>
+            <span style="font-size:1.5rem;">&#127183;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Subjects Grid -->
+<section class="section-sm" style="background: var(--color-dark-bg);">
+  <div class="container">
+    <h2 class="text-center mb-lg">Alle Fächer, ein KI-Tutor</h2>
+    <p class="text-center text-muted mb-2xl" style="max-width:600px; margin-left:auto; margin-right:auto;">
+      Klasse 5 bis 13 — ob Mathe, Deutsch, Englisch oder Chemie, der KI-Tutor hilft in jedem Fach.
+    </p>
+    <div class="subject-grid">
+      <div class="subject-tile"><div class="icon">&#128290;</div><div class="label">Mathematik</div></div>
+      <div class="subject-tile"><div class="icon">&#128214;</div><div class="label">Deutsch</div></div>
+      <div class="subject-tile"><div class="icon">&#127468;&#127463;</div><div class="label">Englisch</div></div>
+      <div class="subject-tile"><div class="icon">&#129516;</div><div class="label">Biologie</div></div>
+      <div class="subject-tile"><div class="icon">&#9883;</div><div class="label">Physik</div></div>
+      <div class="subject-tile"><div class="icon">&#129514;</div><div class="label">Chemie</div></div>
+      <div class="subject-tile"><div class="icon">&#127758;</div><div class="label">Geschichte</div></div>
+      <div class="subject-tile"><div class="icon">&#127759;</div><div class="label">Erdkunde</div></div>
+      <div class="subject-tile"><div class="icon">&#127467;&#127479;</div><div class="label">Französisch</div></div>
+      <div class="subject-tile"><div class="icon">&#127466;&#127480;</div><div class="label">Spanisch</div></div>
+      <div class="subject-tile"><div class="icon">&#128187;</div><div class="label">Informatik</div></div>
+      <div class="subject-tile"><div class="icon">&#127912;</div><div class="label">+ 80 weitere</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section" id="how-it-works">
+  <div class="container">
+    <h2 class="text-center mb-lg">In 3 Schritten zum Lernerfolg</h2>
+    <p class="text-center text-muted mb-2xl" style="max-width:500px; margin-left:auto; margin-right:auto;">
+      Starten Sie in weniger als 2 Minuten — kostenlos und unverbindlich.
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Lern-Quiz starten</h3>
+        <p>Beantworten Sie kurze Fragen, damit wir den Lernplan Ihres Kindes personalisieren können.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Kostenlos testen</h3>
+        <p>30 Tage vollen Zugang — jederzeit online kündbar. Kein Risiko.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Noten verbessern</h3>
+        <p>97% der Schüler verbessern ihre Noten — schon mit 15 Minuten täglich.</p>
+      </div>
+    </div>
+    <div class="text-center mt-xl">
+      <a href="quiz.html" class="btn btn-lg btn-blue">Quiz starten &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" id="testimonials" style="background: var(--color-dark-bg);">
+  <div class="container">
+    <h2 class="text-center mb-lg">Von Eltern geliebt, von Schülern gefeiert</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">
+          &laquo;Meine Tochter hatte eine 4 in Mathe und wollte nie lernen. Seit Knowunity
+          macht sie es freiwillig — und hat jetzt eine 2! Der KI-Tutor erklärt Dinge so,
+          wie es der Lehrer nicht kann.&raquo;
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SK</div>
+          <div class="testimonial-meta">
+            <div class="name">Sandra K.</div>
+            <div class="role">Mutter, Tochter 8. Klasse</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">
+          &laquo;Mein Sohn arbeitet seit Knowunity selbstständig. Er fragt den KI-Tutor
+          statt mich und versteht den Stoff viel besser. Nachhilfe haben wir
+          komplett abbestellt — und sparen 150 Euro im Monat.&raquo;
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MH</div>
+          <div class="testimonial-meta">
+            <div class="name">Michael H.</div>
+            <div class="role">Vater, Sohn 10. Klasse</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">
+          &laquo;Als Lehrerin und Mutter bin ich begeistert. Die KI gibt keine fertigen
+          Antworten, sondern führt zum Verständnis. So sollte KI in der Bildung
+          funktionieren. Absolute Empfehlung!&raquo;
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JW</div>
+          <div class="testimonial-meta">
+            <div class="name">Julia W.</div>
+            <div class="role">Lehrerin & Mutter</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison -->
+<section class="section comparison-section">
+  <div class="container">
+    <h2 class="text-center mb-lg">90% günstiger als klassische Nachhilfe</h2>
+    <p class="text-center text-muted mb-2xl" style="max-width:550px; margin-left:auto; margin-right:auto;">
+      Und 100% persönlicher. Sehen Sie, warum Millionen Schüler Knowunity bevorzugen.
+    </p>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th style="color:var(--color-blue); font-weight:700;">Knowunity</th>
+          <th>Klassische Nachhilfe</th>
+          <th>ChatGPT & Co.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="comparison-highlight">
+          <td><strong>KI-Tutor</strong></td>
+          <td style="color:var(--color-green);">&#10003; Speziell für Schüler</td>
+          <td>&#10007; Kein KI-Support</td>
+          <td>&#9711; Nicht für Schüler gemacht</td>
+        </tr>
+        <tr>
+          <td><strong>Lerninhalte</strong></td>
+          <td style="color:var(--color-green);">&#10003; 1,5 Mio+ verifiziert</td>
+          <td>&#10007; Nicht vorhanden</td>
+          <td>&#10007; Keine Lerninhalte</td>
+        </tr>
+        <tr class="comparison-highlight">
+          <td><strong>Preis / Monat</strong></td>
+          <td style="color:var(--color-green);"><strong>ab 10 &euro;</strong></td>
+          <td>100–200 &euro;</td>
+          <td>20 &euro; (ChatGPT Plus)</td>
+        </tr>
+        <tr>
+          <td><strong>Verfügbarkeit</strong></td>
+          <td style="color:var(--color-green);">&#10003; 24/7</td>
+          <td>&#10007; Feste Termine</td>
+          <td>&#10003; 24/7</td>
+        </tr>
+        <tr class="comparison-highlight">
+          <td><strong>Lehrplan-konform</strong></td>
+          <td style="color:var(--color-green);">&#10003; Alle Bundesländer</td>
+          <td>&#10003; Personenabhängig</td>
+          <td>&#10007; Nicht abgestimmt</td>
+        </tr>
+        <tr>
+          <td><strong>Kindersicher</strong></td>
+          <td style="color:var(--color-green);">&#10003; DSGVO-konform</td>
+          <td>&#10003;</td>
+          <td>&#10007; Nicht für Kinder</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Pricing Preview -->
+<section class="section" id="pricing" style="background: var(--color-dark-bg);">
+  <div class="container">
+    <h2 class="text-center mb-lg">Investieren Sie in die Zukunft Ihres Kindes</h2>
+    <p class="text-center text-muted mb-2xl" style="max-width:550px; margin-left:auto; margin-right:auto;">
+      Günstiger als eine einzige Nachhilfestunde. 30 Tage kostenlos testen — jederzeit kündbar.
+    </p>
+    <div style="max-width:480px; margin:0 auto;">
+      <div class="pricing-card featured" style="transform:none;">
+        <div class="pricing-popular">&#11088; Empfohlen für Eltern</div>
+        <div class="pricing-header">
+          <div class="pricing-name">Knowunity Pro</div>
+          <div class="pricing-price">
+            <span class="pricing-currency">&euro;</span>
+            <span class="pricing-amount">10</span>
+            <span class="pricing-period">/Monat</span>
+          </div>
+          <div class="pricing-original">statt 19,99 &euro;/Mo. · bei jährlicher Zahlung</div>
+        </div>
+        <ul class="pricing-features">
+          <li><span class="icon" style="color:var(--color-green);">&#10003;</span> <strong>Unbegrenzter KI-Tutor</strong> — erklärt in jedem Fach</li>
+          <li><span class="icon" style="color:var(--color-green);">&#10003;</span> 1,5 Mio+ verifizierte Lerninhalte</li>
+          <li><span class="icon" style="color:var(--color-green);">&#10003;</span> Persönlicher Lernplan</li>
+          <li><span class="icon" style="color:var(--color-green);">&#10003;</span> Alle Fächer, Klasse 5–13</li>
+          <li><span class="icon" style="color:var(--color-green);">&#10003;</span> Quizze, Karteikarten & Zusammenfassungen</li>
+          <li><span class="icon" style="color:var(--color-green);">&#10003;</span> Material-Upload & KI-Analyse</li>
+        </ul>
+        <a href="quiz.html" class="btn btn-lg btn-blue pricing-cta" style="width:100%;">30 Tage kostenlos testen &rarr;</a>
+        <div style="text-align:center; margin-top:var(--space-md); font-size:0.8rem; color:var(--color-white-40);">
+          Jederzeit kündbar · Keine versteckten Kosten
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-badges mt-xl">
+      <span class="trust-badge"><span class="icon">&#128274;</span> SSL-verschlüsselt</span>
+      <span class="trust-badge"><span class="icon">&#128737;</span> DSGVO-konform</span>
+      <span class="trust-badge"><span class="icon">&#9989;</span> 30 Tage kostenlos</span>
+      <span class="trust-badge"><span class="icon">&#128260;</span> Jederzeit kündbar</span>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Bereit, die Noten Ihres Kindes zu verbessern?</h2>
+      <p>Starten Sie jetzt — 30 Tage kostenlos, jederzeit kündbar. Kein Risiko.</p>
+      <a href="quiz.html" class="btn btn-lg btn-primary">Jetzt kostenlos starten &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:var(--space-sm);">
+          <span class="logo-icon">K</span>
+          Knowunity
+        </div>
+        <p>Die erste KI, die deinem Kind wirklich was erklärt. Der #1 Lernbegleiter für Klasse 5–13.</p>
+      </div>
+      <div>
+        <h4>Produkt</h4>
+        <ul class="footer-links">
+          <li><a href="#features">Funktionen</a></li>
+          <li><a href="#ai">KI-Tutor</a></li>
+          <li><a href="#pricing">Preise</a></li>
+          <li><a href="quiz.html">Kostenlos testen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Unternehmen</h4>
+        <ul class="footer-links">
+          <li><a href="#">Über uns</a></li>
+          <li><a href="#">Karriere</a></li>
+          <li><a href="#">Presse</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul class="footer-links">
+          <li><a href="#">AGB</a></li>
+          <li><a href="#">Datenschutz</a></li>
+          <li><a href="#">Impressum</a></li>
+          <li><a href="#">Widerrufsrecht</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Knowunity GmbH. Alle Rechte vorbehalten.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowunity — Erleben Sie die Freude an besseren Noten</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { background: var(--color-navy); }
+    .quiz-page { min-height: 100vh; display: flex; flex-direction: column; }
+
+    .quiz-header {
+      padding: var(--space-md) var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-white-10);
+    }
+
+    .progress-track { height: 6px; background: var(--color-white-10); width: 100%; }
+    .progress-fill {
+      height: 100%;
+      background: var(--color-green);
+      transition: width 0.5s ease;
+      border-radius: 3px;
+    }
+
+    .quiz-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl) var(--space-lg);
+    }
+    .quiz-card {
+      max-width: 720px;
+      width: 100%;
+      text-align: center;
+    }
+    .quiz-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+      line-height: 1.3;
+    }
+    .quiz-card .subtitle {
+      color: var(--color-white-60);
+      font-size: 0.95rem;
+      margin-bottom: var(--space-xl);
+    }
+
+    /* Grade grid — 5 to 13 only */
+    .grade-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-sm);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .grade-btn {
+      padding: 14px 8px;
+      background: var(--color-white-05);
+      border: 2px solid var(--color-white-10);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-white-80);
+      text-align: center;
+    }
+    .grade-btn:hover {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.08);
+    }
+    .grade-btn.selected {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.15);
+      color: var(--color-white);
+    }
+    .grade-section-label {
+      grid-column: 1 / -1;
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+      text-align: left;
+      padding: var(--space-sm) 0 var(--space-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Interstitial */
+    .interstitial {
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+    .interstitial-image {
+      width: 280px;
+      height: 180px;
+      margin: 0 auto var(--space-xl);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(0,141,232,0.2), rgba(63,81,181,0.2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      border: 2px solid var(--color-white-10);
+    }
+    .interstitial h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: var(--space-md);
+      color: var(--color-green);
+    }
+    .interstitial .social-proof-text {
+      font-size: 1.05rem;
+      color: var(--color-white-80);
+      line-height: 1.6;
+      margin-bottom: var(--space-xl);
+    }
+    .interstitial .social-proof-text strong { color: var(--color-white); }
+
+    /* Problem cards */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .problem-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-lg) var(--space-md);
+      background: var(--color-white-05);
+      border: 2px solid var(--color-white-10);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-align: center;
+    }
+    .problem-card:hover {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.06);
+      transform: translateY(-2px);
+    }
+    .problem-card.selected {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.12);
+    }
+    .problem-card .card-emoji { font-size: 2.2rem; }
+    .problem-card .card-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-white-80);
+      line-height: 1.3;
+    }
+    .problem-card.selected .card-label { color: var(--color-white); }
+
+    /* Subject chips */
+    .subject-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .subject-chip {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: 12px 20px;
+      background: var(--color-white-05);
+      border: 2px solid var(--color-white-10);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-white-80);
+    }
+    .subject-chip:hover {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.06);
+    }
+    .subject-chip.selected {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.12);
+      color: var(--color-white);
+    }
+    .subject-chip .chip-icon { font-size: 1.2rem; }
+
+    /* Goal options */
+    .goal-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .goal-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: 18px 24px;
+      background: var(--color-white-05);
+      border: 2px solid var(--color-white-10);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-size: 0.95rem;
+      color: var(--color-white-80);
+      text-align: left;
+    }
+    .goal-option:hover {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.06);
+    }
+    .goal-option.selected {
+      border-color: var(--color-blue);
+      background: rgba(0,141,232,0.12);
+      color: var(--color-white);
+    }
+    .goal-option .goal-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+    /* Loading */
+    .loading-screen { max-width: 480px; width: 100%; text-align: center; }
+    .loading-spinner {
+      width: 64px; height: 64px;
+      border: 4px solid var(--color-white-10);
+      border-top-color: var(--color-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto var(--space-xl);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-steps {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      margin-top: var(--space-xl);
+    }
+    .loading-step {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      font-size: 0.9rem;
+      color: var(--color-white-40);
+      transition: color 0.3s ease;
+    }
+    .loading-step.active { color: var(--color-white-80); }
+    .loading-step.done { color: var(--color-green); }
+    .loading-step .step-check {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--color-white-20);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .loading-step.done .step-check {
+      border-color: var(--color-green);
+      background: rgba(0,200,83,0.15);
+    }
+    .loading-step.active .step-check { border-color: var(--color-blue); }
+
+    /* Result / offer */
+    .result-card { max-width: 680px; width: 100%; text-align: center; }
+    .offer-box {
+      background: var(--color-navy-light);
+      border: 2px solid var(--color-white-10);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl) var(--space-2xl);
+      margin: var(--space-xl) 0;
+    }
+    .offer-discount {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(0,200,83,0.15);
+      border: 1px solid rgba(0,200,83,0.3);
+      border-radius: var(--radius-pill);
+      color: var(--color-green);
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: var(--space-md);
+    }
+    .offer-price {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--color-white);
+      line-height: 1.1;
+    }
+    .offer-price .currency { font-size: 1.5rem; vertical-align: super; }
+    .offer-price .period { font-size: 1rem; font-weight: 500; color: var(--color-white-60); }
+    .offer-original {
+      font-size: 0.9rem;
+      color: var(--color-white-40);
+      text-decoration: line-through;
+      margin-top: var(--space-xs);
+    }
+    .offer-sub {
+      font-size: 0.85rem;
+      color: var(--color-white-40);
+      margin-top: var(--space-xs);
+    }
+    .offer-features {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin: var(--space-lg) 0;
+      text-align: left;
+    }
+    .offer-feature {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.9rem;
+      color: var(--color-white-80);
+    }
+    .offer-feature .check { color: var(--color-green); font-weight: 700; }
+    .stat-pills {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      margin: var(--space-lg) 0;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: 8px 16px;
+      background: var(--color-white-05);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-pill);
+      font-size: 0.85rem;
+      color: var(--color-white-80);
+    }
+
+    /* Nav buttons */
+    .quiz-nav {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-md);
+      margin-top: var(--space-xl);
+    }
+    .quiz-nav .btn { min-width: 160px; }
+
+    /* Trust footer */
+    .trust-footer {
+      border-top: 1px solid var(--color-white-10);
+      padding: var(--space-md) var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2xl);
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+    }
+    .trust-item .trust-stars { color: #ffc107; }
+    .trust-item strong { color: var(--color-white-60); }
+
+    /* Urgency */
+    .urgency-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm);
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+      background: var(--color-white-05);
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      background: var(--color-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .selection-hint {
+      font-size: 0.85rem;
+      color: var(--color-white-40);
+      margin-top: var(--space-sm);
+    }
+    .selection-hint.met { color: var(--color-green); }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 640px) {
+      .grade-grid { grid-template-columns: repeat(3, 1fr); }
+      .problem-grid { grid-template-columns: repeat(2, 1fr); }
+      .quiz-card h2 { font-size: 1.3rem; }
+      .interstitial h2 { font-size: 1.5rem; }
+      .offer-price { font-size: 2.2rem; }
+      .trust-footer { gap: var(--space-lg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-page">
+  <div class="quiz-header">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">K</span>
+      Knowunity
+    </a>
+    <span style="font-size:0.85rem; color:var(--color-white-40);" id="headerSubtitle">In nur 2 Minuten zum persönlichen Angebot</span>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+  </div>
+
+  <div class="urgency-bar">
+    <span class="live-dot"></span>
+    <span id="urgencyText">Letzter Kauf: vor 3 Minuten</span>
+  </div>
+
+  <div class="quiz-main">
+
+    <!-- STEP 1: Grade Selection (5–13 only) -->
+    <div class="quiz-card" id="step1">
+      <h2>Welche Klassenstufe besucht Ihr Kind?</h2>
+      <p class="subtitle">Damit wir das Lernerlebnis personalisieren können.</p>
+      <div class="grade-grid">
+        <div class="grade-section-label">Mittelstufe</div>
+        <div class="grade-btn" onclick="selectGrade(this, 5)">5</div>
+        <div class="grade-btn" onclick="selectGrade(this, 6)">6</div>
+        <div class="grade-btn" onclick="selectGrade(this, 7)">7</div>
+        <div class="grade-btn" onclick="selectGrade(this, 8)">8</div>
+        <div class="grade-btn" onclick="selectGrade(this, 9)">9</div>
+        <div class="grade-section-label">Oberstufe</div>
+        <div class="grade-btn" onclick="selectGrade(this, 10)">10</div>
+        <div class="grade-btn" onclick="selectGrade(this, 11)">11</div>
+        <div class="grade-btn" onclick="selectGrade(this, 12)">12</div>
+        <div class="grade-btn" onclick="selectGrade(this, 13)">13</div>
+        <div style=""></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Interstitial -->
+    <div class="interstitial hidden" id="step2">
+      <div class="interstitial-image" id="interstitialEmoji">&#127891;</div>
+      <h2>Yay, hier sind Sie richtig!</h2>
+      <p class="social-proof-text">
+        Über <strong id="gradeUserCount">385.000</strong> Schüler*innen der <strong id="gradeLabel">10. Klasse</strong>
+        nutzen bereits Knowunity, um ihre Leistungen in der Schule zu verbessern.
+      </p>
+      <button class="btn btn-lg btn-blue" onclick="goToStep(3)">Weiter &rarr;</button>
+    </div>
+
+    <!-- STEP 3: Pain Points (min 1) -->
+    <div class="quiz-card hidden" id="step3">
+      <h2>Wählen Sie Probleme, mit denen Ihr Kind zu kämpfen hat.</h2>
+      <p class="subtitle">Wählen Sie mindestens eins aus.</p>
+      <div class="problem-grid">
+        <div class="problem-card" onclick="toggleProblem(this)">
+          <span class="card-emoji">&#128548;</span>
+          <span class="card-label">Leistungsdruck und Stress</span>
+        </div>
+        <div class="problem-card" onclick="toggleProblem(this)">
+          <span class="card-emoji">&#128564;</span>
+          <span class="card-label">Langweiliger Unterricht</span>
+        </div>
+        <div class="problem-card" onclick="toggleProblem(this)">
+          <span class="card-emoji">&#128546;</span>
+          <span class="card-label">Fehlende Lernerfolge</span>
+        </div>
+        <div class="problem-card" onclick="toggleProblem(this)">
+          <span class="card-emoji">&#129327;</span>
+          <span class="card-label">Konzentrations&shy;probleme</span>
+        </div>
+        <div class="problem-card" onclick="toggleProblem(this)">
+          <span class="card-emoji">&#128566;</span>
+          <span class="card-label">Lernschwächen</span>
+        </div>
+        <div class="problem-card" onclick="toggleProblem(this)">
+          <span class="card-emoji">&#128560;</span>
+          <span class="card-label">Versetzung in Gefahr</span>
+        </div>
+      </div>
+      <p class="selection-hint" id="problemHint">Noch mindestens 1 wählen</p>
+      <div class="quiz-nav">
+        <button class="btn btn-ghost btn-sm" onclick="goToStep(1)">&larr; Zurück</button>
+        <button class="btn btn-blue" id="problemNext" onclick="goToStep(4)" disabled>Weiter &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Subjects -->
+    <div class="quiz-card hidden" id="step4">
+      <h2>In welchen Fächern braucht Ihr Kind Unterstützung?</h2>
+      <p class="subtitle">Wählen Sie ein oder mehrere Fächer.</p>
+      <div class="subject-chips">
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#128290;</span> Mathematik
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#128214;</span> Deutsch
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#127468;&#127463;</span> Englisch
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#129516;</span> Biologie
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#9883;</span> Physik
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#129514;</span> Chemie
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#127758;</span> Geschichte
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#127467;&#127479;</span> Französisch
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#127466;&#127480;</span> Spanisch
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#128187;</span> Informatik
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#127759;</span> Erdkunde
+        </div>
+        <div class="subject-chip" onclick="toggleSubject(this)">
+          <span class="chip-icon">&#128196;</span> Latein
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn btn-ghost btn-sm" onclick="goToStep(3)">&larr; Zurück</button>
+        <button class="btn btn-blue" id="subjectNext" onclick="goToStep(5)" disabled>Weiter &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Goal -->
+    <div class="quiz-card hidden" id="step5">
+      <h2>Was ist Ihr wichtigstes Ziel?</h2>
+      <p class="subtitle">Wählen Sie das Ziel, das Ihnen am wichtigsten ist.</p>
+      <div class="goal-list">
+        <div class="goal-option" onclick="selectGoal(this)">
+          <span class="goal-icon">&#128200;</span>
+          <span>Noten um mindestens eine Stufe verbessern</span>
+        </div>
+        <div class="goal-option" onclick="selectGoal(this)">
+          <span class="goal-icon">&#128170;</span>
+          <span>Mein Kind soll eigenständiger lernen</span>
+        </div>
+        <div class="goal-option" onclick="selectGoal(this)">
+          <span class="goal-icon">&#129504;</span>
+          <span>Besseres Verständnis der Schulinhalte</span>
+        </div>
+        <div class="goal-option" onclick="selectGoal(this)">
+          <span class="goal-icon">&#127942;</span>
+          <span>Optimale Prüfungsvorbereitung (Abitur / MSA)</span>
+        </div>
+        <div class="goal-option" onclick="selectGoal(this)">
+          <span class="goal-icon">&#128150;</span>
+          <span>Lernen soll wieder Spaß machen</span>
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn btn-ghost btn-sm" onclick="goToStep(4)">&larr; Zurück</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: Loading -->
+    <div class="loading-screen hidden" id="step6">
+      <div class="loading-spinner"></div>
+      <h2 style="font-family:var(--font-display); font-size:1.4rem; margin-bottom:var(--space-sm);">Wir erstellen Ihren personalisierten Lernplan...</h2>
+      <p style="color:var(--color-white-60); font-size:0.9rem;">Basierend auf Ihren Antworten</p>
+      <div class="loading-steps">
+        <div class="loading-step" id="loadStep1">
+          <div class="step-check">&#10003;</div>
+          <span>Klassenstufe und Fächer analysiert</span>
+        </div>
+        <div class="loading-step" id="loadStep2">
+          <div class="step-check">&#10003;</div>
+          <span>Herausforderungen erkannt</span>
+        </div>
+        <div class="loading-step" id="loadStep3">
+          <div class="step-check">&#10003;</div>
+          <span>KI-Lernplan erstellt</span>
+        </div>
+        <div class="loading-step" id="loadStep4">
+          <div class="step-check">&#10003;</div>
+          <span>Persönliches Angebot berechnet</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 7: Result + Pricing Offer -->
+    <div class="result-card hidden" id="step7">
+      <h2 style="font-family:var(--font-display); font-size:1.8rem; margin-bottom:var(--space-sm);">
+        Ihr persönlicher Lernplan ist fertig!
+      </h2>
+      <p style="color:var(--color-white-60); font-size:1rem; margin-bottom:var(--space-sm);">
+        Basierend auf Ihren Antworten empfehlen wir:
+      </p>
+
+      <div class="stat-pills">
+        <div class="stat-pill">&#128200; 97% verbessern Noten</div>
+        <div class="stat-pill">&#9200; Nur 15 Min/Tag</div>
+        <div class="stat-pill">&#129302; KI-Tutor 24/7</div>
+      </div>
+
+      <div class="offer-box">
+        <div class="offer-discount">&#127881; 50% Willkommensrabatt</div>
+        <div class="offer-price">
+          <span class="currency">&euro;</span>10<span class="period">/Monat</span>
+        </div>
+        <div class="offer-original">statt 19,99 &euro;/Mo.</div>
+        <div class="offer-sub">Bei jährlicher Zahlung (120 &euro;/Jahr) · Günstiger als eine einzige Nachhilfestunde</div>
+
+        <div class="offer-features">
+          <div class="offer-feature"><span class="check">&#10003;</span> Unbegrenzter KI-Tutor — erklärt in jedem Fach</div>
+          <div class="offer-feature"><span class="check">&#10003;</span> Persönlicher Lernplan für <span id="resultGrade">Klasse 10</span></div>
+          <div class="offer-feature"><span class="check">&#10003;</span> 1,5 Mio+ Zusammenfassungen & Karteikarten</div>
+          <div class="offer-feature"><span class="check">&#10003;</span> Quizze, Hausaufgabenhilfe & Prüfungsvorbereitung</div>
+          <div class="offer-feature"><span class="check">&#10003;</span> Material-Upload & KI-Analyse</div>
+          <div class="offer-feature"><span class="check">&#10003;</span> Sicher & DSGVO-konform</div>
+        </div>
+
+        <a href="pricing.html" class="btn btn-lg btn-green" style="width:100%; font-size:1.05rem;">
+          30 Tage kostenlos testen &rarr;
+        </a>
+        <p style="font-size:0.8rem; color:var(--color-white-40); margin-top:var(--space-md);">
+          Erste Zahlung erst nach 30 Tagen · Jederzeit mit einem Klick kündbar
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Trust footer -->
+  <div class="trust-footer">
+    <div class="trust-item">
+      <span class="trust-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span><strong>4.7</strong> App Store (100.000+ Bewertungen)</span>
+    </div>
+    <div class="trust-item">
+      <span>&#128274;</span>
+      <span><strong>DSGVO-konform</strong></span>
+    </div>
+    <div class="trust-item">
+      <span><strong>97%</strong> verbessern ihre Noten</span>
+    </div>
+    <div class="trust-item">
+      <span><strong>5 Mio+</strong> Schüler vertrauen uns</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedGrade = null;
+  let selectedProblems = 0;
+  let selectedSubjects = 0;
+  let currentStep = 1;
+
+  const gradeStats = {
+    5: '125.000', 6: '148.000', 7: '198.000', 8: '285.000',
+    9: '342.000', 10: '385.000', 11: '410.000', 12: '395.000', 13: '280.000'
+  };
+
+  const stepProgress = { 1: 0, 2: 14, 3: 28, 4: 50, 5: 72, 6: 90, 7: 100 };
+
+  function updateProgress(step) {
+    document.getElementById('progressBar').style.width = stepProgress[step] + '%';
+  }
+
+  function goToStep(step) {
+    for (let i = 1; i <= 7; i++) {
+      const el = document.getElementById('step' + i);
+      if (el) el.classList.add('hidden');
+    }
+    document.getElementById('step' + step).classList.remove('hidden');
+    currentStep = step;
+    updateProgress(step);
+
+    if (step === 7) {
+      document.getElementById('headerSubtitle').textContent = 'Ihr Ergebnis';
+    } else if (step === 6) {
+      document.getElementById('headerSubtitle').textContent = 'Wird geladen...';
+    } else {
+      document.getElementById('headerSubtitle').textContent = 'In nur 2 Minuten zum persönlichen Angebot';
+    }
+  }
+
+  function selectGrade(el, grade) {
+    document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedGrade = grade;
+
+    document.getElementById('gradeUserCount').textContent = gradeStats[grade];
+    document.getElementById('gradeLabel').textContent = grade + '. Klasse';
+    document.getElementById('resultGrade').textContent = 'Klasse ' + grade;
+
+    var emoji = grade <= 7 ? '\u{1F468}\u200D\u{1F393}' : '\u{1F393}';
+    document.getElementById('interstitialEmoji').textContent = emoji;
+
+    setTimeout(function() { goToStep(2); }, 400);
+  }
+
+  function toggleProblem(el) {
+    el.classList.toggle('selected');
+    selectedProblems = document.querySelectorAll('.problem-card.selected').length;
+
+    var hint = document.getElementById('problemHint');
+    var btn = document.getElementById('problemNext');
+    if (selectedProblems >= 1) {
+      hint.textContent = selectedProblems + ' ausgewählt';
+      hint.classList.add('met');
+      btn.disabled = false;
+    } else {
+      hint.textContent = 'Noch mindestens 1 wählen';
+      hint.classList.remove('met');
+      btn.disabled = true;
+    }
+  }
+
+  function toggleSubject(el) {
+    el.classList.toggle('selected');
+    selectedSubjects = document.querySelectorAll('.subject-chip.selected').length;
+    document.getElementById('subjectNext').disabled = selectedSubjects === 0;
+  }
+
+  function selectGoal(el) {
+    document.querySelectorAll('.goal-option').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+    setTimeout(function() {
+      goToStep(6);
+      runLoadingSequence();
+    }, 400);
+  }
+
+  function runLoadingSequence() {
+    var steps = [
+      document.getElementById('loadStep1'),
+      document.getElementById('loadStep2'),
+      document.getElementById('loadStep3'),
+      document.getElementById('loadStep4')
+    ];
+    steps.forEach(function(s, i) {
+      setTimeout(function() { s.classList.add('active'); }, i * 700);
+      setTimeout(function() { s.classList.remove('active'); s.classList.add('done'); }, (i + 1) * 700);
+    });
+    setTimeout(function() { goToStep(7); }, 3200);
+  }
+
+  (function() {
+    var times = ['vor 1 Minute', 'vor 3 Minuten', 'vor 5 Minuten', 'vor 8 Minuten'];
+    document.getElementById('urgencyText').textContent = 'Letzter Kauf: ' + times[Math.floor(Math.random() * times.length)];
+  })();
+</script>
+
+</body>
+</html>

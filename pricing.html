@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowunity Pro — 30 Tage kostenlos testen</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .pricing-page {
+      min-height: 100vh;
+      background: var(--gradient-hero);
+      padding-top: 70px;
+    }
+    .pricing-hero {
+      text-align: center;
+      padding: var(--space-2xl) 0 var(--space-lg);
+    }
+    .pricing-hero .discount-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: 8px 20px;
+      background: rgba(0, 200, 83, 0.15);
+      border: 1px solid rgba(0, 200, 83, 0.3);
+      border-radius: var(--radius-pill);
+      color: var(--color-green);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Trust badges — Sofatutor style */
+    .trust-badges-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2xl);
+      flex-wrap: wrap;
+      margin: var(--space-xl) auto;
+      padding: var(--space-lg) 0;
+      border-top: 1px solid var(--color-white-10);
+      border-bottom: 1px solid var(--color-white-10);
+      max-width: 800px;
+    }
+    .trust-badge-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-align: center;
+    }
+    .trust-badge-stars { color: #ffc107; font-size: 0.85rem; letter-spacing: 1px; }
+    .trust-badge-score { font-size: 1.1rem; font-weight: 800; color: var(--color-white); }
+    .trust-badge-source { font-size: 0.75rem; color: var(--color-white-40); }
+    .trust-badge-count { font-size: 0.7rem; color: var(--color-white-40); }
+
+    /* Single plan card — centered, prominent */
+    .plan-card-wrapper {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .plan-card {
+      background: var(--color-navy-light);
+      border: 2px solid rgba(0,141,232,0.3);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-2xl);
+      position: relative;
+      overflow: hidden;
+    }
+    .plan-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--gradient-cta);
+    }
+    .plan-popular {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--gradient-cta);
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: var(--space-lg);
+    }
+    .plan-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .plan-price {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: var(--space-xs);
+    }
+    .plan-price .currency { font-size: 1.8rem; vertical-align: super; }
+    .plan-price .period { font-size: 1rem; font-weight: 500; color: var(--color-white-60); }
+    .plan-original {
+      font-size: 0.9rem;
+      color: var(--color-white-40);
+      margin-bottom: var(--space-xs);
+    }
+    .plan-original s { text-decoration: line-through; }
+    .plan-billing {
+      font-size: 0.85rem;
+      color: var(--color-white-40);
+      margin-bottom: var(--space-sm);
+    }
+    .plan-cheaper {
+      display: inline-block;
+      padding: 4px 14px;
+      background: rgba(0,141,232,0.1);
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-blue-light);
+      margin-bottom: var(--space-xl);
+    }
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+      text-align: left;
+    }
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.95rem;
+      color: var(--color-white-80);
+    }
+    .plan-features li .icon { color: var(--color-green); font-weight: 700; flex-shrink: 0; }
+    .plan-cta-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+      margin-top: var(--space-md);
+    }
+
+    /* Urgency */
+    .last-purchase {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      font-size: 0.8rem;
+      color: var(--color-white-40);
+      margin-top: var(--space-lg);
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      background: var(--color-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* Trial banner */
+    .trial-banner {
+      background: rgba(0, 200, 83, 0.08);
+      border: 1px solid rgba(0, 200, 83, 0.2);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      max-width: 600px;
+      margin: var(--space-2xl) auto 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+    .trial-banner-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .trial-banner h4 { font-size: 1rem; margin-bottom: 4px; }
+    .trial-banner p { font-size: 0.875rem; color: var(--color-white-60); }
+
+    /* Impact stats */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+      max-width: 800px;
+      margin: var(--space-xl) auto 0;
+    }
+    .impact-card {
+      padding: var(--space-xl);
+      background: var(--color-white-05);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-xl);
+      text-align: center;
+    }
+    .impact-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--color-blue-light);
+      line-height: 1;
+      margin-bottom: var(--space-sm);
+    }
+    .impact-label { font-size: 0.85rem; color: var(--color-white-60); line-height: 1.4; }
+
+    /* Testimonials */
+    .ptestimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg);
+      max-width: 800px;
+      margin: var(--space-xl) auto 0;
+    }
+    .ptestimonial {
+      background: var(--color-white-05);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+    }
+    .ptestimonial .stars { color: #ffc107; font-size: 0.85rem; margin-bottom: var(--space-sm); }
+    .ptestimonial .quote {
+      font-size: 0.9rem;
+      color: var(--color-white-80);
+      line-height: 1.6;
+      font-style: italic;
+      margin-bottom: var(--space-md);
+    }
+    .ptestimonial .author { display: flex; align-items: center; gap: var(--space-sm); }
+    .ptestimonial .avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--gradient-blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
+    }
+    .ptestimonial .name { font-size: 0.8rem; font-weight: 600; }
+    .ptestimonial .role { font-size: 0.7rem; color: var(--color-white-40); }
+
+    /* vs Nachhilfe */
+    .vs-section { max-width: 600px; margin: 0 auto; }
+    .vs-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--space-lg);
+      align-items: center;
+      padding: var(--space-md) 0;
+      border-bottom: 1px solid var(--color-white-10);
+    }
+    .vs-row:last-child { border-bottom: none; }
+    .vs-label { font-size: 0.8rem; color: var(--color-white-40); text-align: center; font-weight: 600; }
+    .vs-knowunity { text-align: right; font-weight: 600; color: var(--color-green); font-size: 0.95rem; }
+    .vs-tutoring { text-align: left; color: var(--color-white-40); font-size: 0.95rem; }
+
+    /* FAQ */
+    .faq-section { max-width: 600px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--color-white-10); }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-lg) 0; cursor: pointer;
+      font-weight: 600; font-size: 1rem; color: var(--color-white);
+      transition: color var(--transition-fast);
+    }
+    .faq-question:hover { color: var(--color-blue-light); }
+    .faq-question .arrow { transition: transform var(--transition-fast); font-size: 0.8rem; color: var(--color-white-40); }
+    .faq-item.open .faq-question .arrow { transform: rotate(180deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+    .faq-item.open .faq-answer { max-height: 300px; padding-bottom: var(--space-lg); }
+    .faq-answer p { color: var(--color-white-60); font-size: 0.95rem; line-height: 1.7; }
+
+    /* Guarantee */
+    .guarantee {
+      text-align: center;
+      padding: var(--space-2xl);
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--color-white-05);
+      border: 1px solid var(--color-white-10);
+      border-radius: var(--radius-xl);
+    }
+    .guarantee-icon { font-size: 3rem; margin-bottom: var(--space-md); }
+    .guarantee h3 { margin-bottom: var(--space-sm); }
+    .guarantee p { color: var(--color-white-60); font-size: 0.95rem; line-height: 1.6; }
+
+    @media (max-width: 768px) {
+      .trust-badges-row { gap: var(--space-lg); }
+      .impact-grid { grid-template-columns: 1fr; }
+      .ptestimonial-grid { grid-template-columns: 1fr; }
+      .vs-row { grid-template-columns: 1fr; gap: var(--space-xs); text-align: center; }
+      .vs-knowunity, .vs-tutoring { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">K</span>
+      Knowunity
+    </a>
+    <div class="nav-cta">
+      <a href="checkout.html?plan=pro" class="btn btn-sm btn-blue">Kostenlos starten</a>
+    </div>
+  </div>
+</nav>
+
+<div class="pricing-page">
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="pricing-hero">
+      <div class="discount-badge">&#127881; 50% Rabatt — Nur für kurze Zeit</div>
+      <h1>Die erste KI, die deinem Kind wirklich was erklärt</h1>
+      <p class="text-muted" style="max-width:550px; margin:var(--space-md) auto 0; font-size:1.05rem;">
+        90% günstiger als klassische Nachhilfe. 30 Tage kostenlos testen — jederzeit kündbar.
+      </p>
+
+      <!-- Trust badges — Sofatutor pattern -->
+      <div class="trust-badges-row">
+        <div class="trust-badge-item">
+          <div class="trust-badge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="trust-badge-score">4.7</div>
+          <div class="trust-badge-source">App Store</div>
+          <div class="trust-badge-count">100.000+ Bewertungen</div>
+        </div>
+        <div class="trust-badge-item">
+          <div class="trust-badge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="trust-badge-score">4.8</div>
+          <div class="trust-badge-source">Google Play</div>
+          <div class="trust-badge-count">25.000+ Bewertungen</div>
+        </div>
+        <div class="trust-badge-item">
+          <div class="trust-badge-score" style="color:var(--color-green);">97%</div>
+          <div class="trust-badge-source">verbessern ihre Noten</div>
+          <div class="trust-badge-count">basierend auf Nutzerbefragung</div>
+        </div>
+        <div class="trust-badge-item">
+          <div class="trust-badge-score">5 Mio+</div>
+          <div class="trust-badge-source">aktive Schüler</div>
+          <div class="trust-badge-count">#1 Bildungs-App DE</div>
+        </div>
+      </div>
+
+      <div class="last-purchase">
+        <span class="live-dot"></span>
+        <span id="lastPurchase">Letzter Kauf: vor 2 Minuten</span>
+      </div>
+    </div>
+
+    <!-- Single Plan Card -->
+    <div class="plan-card-wrapper">
+      <div class="plan-card">
+        <div style="text-align:center;">
+          <div class="plan-popular">&#11088; Empfohlen für Eltern</div>
+          <div class="plan-name">Knowunity Pro</div>
+          <div class="plan-price">
+            <span class="currency">&euro;</span>10<span class="period">/Monat</span>
+          </div>
+          <div class="plan-original"><s>19,99 &euro;/Mo.</s> — Sie sparen 50%</div>
+          <div class="plan-billing">Bei jährlicher Zahlung (120 &euro;/Jahr)</div>
+          <div class="plan-cheaper">Günstiger als eine einzige Nachhilfestunde</div>
+        </div>
+
+        <ul class="plan-features">
+          <li><span class="icon">&#10003;</span> <strong>Unbegrenzter KI-Tutor</strong> — erklärt in jedem Fach</li>
+          <li><span class="icon">&#10003;</span> Persönlicher Lernplan, angepasst an Niveau & Ziele</li>
+          <li><span class="icon">&#10003;</span> 1,5 Mio+ verifizierte Lerninhalte</li>
+          <li><span class="icon">&#10003;</span> Alle Fächer, Klasse 5–13, alle Bundesländer</li>
+          <li><span class="icon">&#10003;</span> Quizze, Karteikarten & Zusammenfassungen</li>
+          <li><span class="icon">&#10003;</span> Material-Upload & KI-Analyse</li>
+          <li><span class="icon">&#10003;</span> Prüfungsvorbereitung (Abitur, MSA & mehr)</li>
+          <li><span class="icon">&#10003;</span> Sicher & DSGVO-konform</li>
+        </ul>
+
+        <a href="checkout.html?plan=pro" class="btn btn-lg btn-green" style="width:100%; font-size:1.05rem;">
+          30 Tage kostenlos testen &rarr;
+        </a>
+        <div class="plan-cta-note">
+          Erste Zahlung erst nach 30 Tagen · Jederzeit mit einem Klick kündbar
+        </div>
+      </div>
+    </div>
+
+    <!-- Trial Banner -->
+    <div class="trial-banner">
+      <div class="trial-banner-icon">&#128274;</div>
+      <div>
+        <h4>30 Tage kostenlos — ohne Risiko</h4>
+        <p>Testen Sie Knowunity Pro 30 Tage lang kostenlos. Kündigung jederzeit mit einem Klick in der App. Keine versteckten Kosten.</p>
+      </div>
+    </div>
+
+    <!-- Impact Stats -->
+    <section class="section">
+      <h2 class="text-center mb-sm">Nachweislicher Lernerfolg</h2>
+      <p class="text-center text-muted">Basierend auf einer Befragung von Knowunity-Nutzern</p>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-number">97%</div>
+          <div class="impact-label">der Schüler verbessern ihre Noten in mindestens einem Fach</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-number">89%</div>
+          <div class="impact-label">lernen eigenständiger und brauchen weniger Hilfe</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-number">94%</div>
+          <div class="impact-label">verstehen den Unterrichtsstoff besser dank KI-Erklärungen</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section-sm">
+      <h2 class="text-center mb-sm">Das sagen Eltern über Knowunity</h2>
+      <p class="text-center text-muted mb-lg">Tausende Familien vertrauen auf Knowunity</p>
+      <div class="ptestimonial-grid">
+        <div class="ptestimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="quote">&laquo;Meine Tochter hatte eine 4 in Mathe und wollte nie lernen. Nach zwei Monaten mit Knowunity hat sie eine 2! Der KI-Tutor erklärt Dinge so, wie es der Lehrer nicht kann.&raquo;</p>
+          <div class="author">
+            <div class="avatar">SK</div>
+            <div><div class="name">Sandra K.</div><div class="role">Mutter, Tochter 8. Klasse</div></div>
+          </div>
+        </div>
+        <div class="ptestimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="quote">&laquo;Mein Sohn arbeitet seit Knowunity selbstständig. Er fragt den KI-Tutor statt mich — und versteht den Stoff viel besser. Nachhilfe haben wir abbestellt und sparen 150 €/Monat.&raquo;</p>
+          <div class="author">
+            <div class="avatar">MH</div>
+            <div><div class="name">Michael H.</div><div class="role">Vater, Sohn 10. Klasse</div></div>
+          </div>
+        </div>
+        <div class="ptestimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="quote">&laquo;Beste Investition für meine Kinder. Der Preis ist fast nichts im Vergleich zu Nachhilfe — und die Kinder nutzen es tatsächlich freiwillig!&raquo;</p>
+          <div class="author">
+            <div class="avatar">TM</div>
+            <div><div class="name">Thomas M.</div><div class="role">Vater, 2 Kinder (10. + 12. Klasse)</div></div>
+          </div>
+        </div>
+        <div class="ptestimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="quote">&laquo;Als Lehrerin und Mutter: Die KI gibt keine fertigen Antworten, sondern führt Schritt für Schritt zum Verständnis. Genau so sollte KI in der Bildung funktionieren.&raquo;</p>
+          <div class="author">
+            <div class="avatar">JW</div>
+            <div><div class="name">Julia W.</div><div class="role">Lehrerin & Mutter</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- vs Nachhilfe -->
+    <section class="section-sm">
+      <div class="vs-section">
+        <h2 class="text-center mb-sm">Knowunity vs. klassische Nachhilfe</h2>
+        <p class="text-center text-muted mb-xl">90% günstiger, 100% persönlicher.</p>
+        <div class="vs-row">
+          <div class="vs-knowunity">10 &euro;/Mo.</div>
+          <div class="vs-label">PREIS</div>
+          <div class="vs-tutoring">100–200 &euro;/Mo.</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-knowunity">24/7 verfügbar</div>
+          <div class="vs-label">ZEIT</div>
+          <div class="vs-tutoring">Feste Termine</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-knowunity">Alle Fächer, ein Abo</div>
+          <div class="vs-label">FÄCHER</div>
+          <div class="vs-tutoring">Pro Fach extra zahlen</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-knowunity">KI passt sich sofort an</div>
+          <div class="vs-label">TEMPO</div>
+          <div class="vs-tutoring">Personenabhängig</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-knowunity">Sofort starten</div>
+          <div class="vs-label">START</div>
+          <div class="vs-tutoring">Terminfindung nötig</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-knowunity">Jederzeit kündbar</div>
+          <div class="vs-label">BINDUNG</div>
+          <div class="vs-tutoring">Oft Mindestlaufzeit</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-sm">
+      <h2 class="text-center mb-2xl">Häufig gestellte Fragen</h2>
+      <div class="faq-section">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Was ist Knowunity Pro?
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="faq-answer">
+            <p>Knowunity Pro kann deinem Kind helfen, effizienter zu lernen. Du kannst die App ohne Werbeunterbrechungen nutzen, Inhalte offline herunterladen und erhältst unbegrenzten Zugang zum KI-Tutor, der in jedem Fach Schritt für Schritt erklärt.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Wie sorgt Knowunity für die Sicherheit meines Kindes?
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="faq-answer">
+            <p>Knowunity bietet eine sichere und inklusive Lernumgebung. Wir setzen auf Community-Richtlinien, Moderation und technische Maßnahmen, um ungeeignete Inhalte zu verhindern. Alle Daten werden DSGVO-konform verarbeitet.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Wie funktioniert die kostenlose Testphase?
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="faq-answer">
+            <p>Sie erhalten 30 Tage vollen Zugang zu allen Pro-Funktionen — völlig kostenlos. Sie können jederzeit mit einem Klick in der App kündigen. Wenn Sie nicht kündigen, wird das Jahresabo (120 €) nach 30 Tagen aktiviert.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Für welche Klassenstufen ist Knowunity geeignet?
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="faq-answer">
+            <p>Knowunity deckt alle Klassenstufen von 5 bis 13 ab, inklusive Abitur- und MSA-Vorbereitung. Die Inhalte und der KI-Tutor passen sich automatisch an das Niveau Ihres Kindes an.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Wie kündige ich das Abo?
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="faq-answer">
+            <p>Ganz einfach: Öffnen Sie die App, gehen Sie zu Einstellungen &gt; Abo und klicken Sie auf „Kündigen". Fertig. Keine Anrufe, keine E-Mails, keine versteckten Hürden.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Was unterscheidet Knowunity von ChatGPT?
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="faq-answer">
+            <p>Knowunitys KI wurde speziell für den Schulkontext entwickelt: altersgerechte Erklärungen, Schritt-für-Schritt-Lösungswege statt fertige Antworten, auf den Lehrplan abgestimmt und sicher — kein Zugang zu ungeeigneten Inhalten.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guarantee -->
+    <section class="section-sm">
+      <div class="guarantee">
+        <div class="guarantee-icon">&#128737;</div>
+        <h3>30-Tage-Geld-zurück-Garantie</h3>
+        <p>Wenn Sie aus irgendeinem Grund nicht zufrieden sind, erhalten Sie Ihr Geld zurück — ohne Wenn und Aber.</p>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section-sm">
+      <div class="cta-banner">
+        <h2>Starten Sie jetzt — 30 Tage kostenlos</h2>
+        <p>Schließen Sie sich 5 Millionen Schülern an, die mit Knowunity bessere Noten erreichen.</p>
+        <a href="checkout.html?plan=pro" class="btn btn-lg btn-primary">Kostenlos starten &rarr;</a>
+        <div style="margin-top:var(--space-md); font-size:0.8rem; color:var(--color-white-40);">
+          Jederzeit kündbar · Keine versteckten Kosten · DSGVO-konform
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none; padding-top:0;">
+      <span>&copy; 2025 Knowunity GmbH. Alle Rechte vorbehalten.</span>
+      <div style="display:flex; gap:var(--space-lg);">
+        <a href="#" style="color:var(--color-white-40); font-size:0.8rem;">AGB</a>
+        <a href="#" style="color:var(--color-white-40); font-size:0.8rem;">Datenschutz</a>
+        <a href="#" style="color:var(--color-white-40); font-size:0.8rem;">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
+  (function() {
+    var times = ['vor 1 Minute', 'vor 2 Minuten', 'vor 4 Minuten', 'vor 6 Minuten'];
+    document.getElementById('lastPurchase').textContent =
+      'Letzter Kauf: ' + times[Math.floor(Math.random() * times.length)];
+  })();
+</script>
+
+</body>
+</html>
